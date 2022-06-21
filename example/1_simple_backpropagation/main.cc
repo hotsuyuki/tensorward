@@ -9,8 +9,11 @@
 #define DEBUG_PRINT(var) std::cout << #var << " = " << std::endl << var << std::endl;
 
 int main(int argc, char* argv[]) {
+  // in = 0.5
   const xt::xarray<float> input_data({0.5});
   const tensorward::core::TensorSharedPtr input_tensor_ptr = std::make_shared<tensorward::core::Tensor>(input_data);
+
+  // out = {exp(in^2)}^2
   const tensorward::core::TensorSharedPtr output_tensor_ptr =
       tensorward::function::square(tensorward::function::exp(tensorward::function::square(input_tensor_ptr)));
 
