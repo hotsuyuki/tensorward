@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <vector>
 
 #include <xtensor/xarray.hpp>
 
@@ -11,33 +12,54 @@ namespace tensorward::core {
 
 class Function : public std::enable_shared_from_this<Function> {
  public:
-  Function() {}
+  struct NamedArg {
+    std::size_t num_inputs;
+    std::size_t num_outputs;
+  };
+
+  explicit Function(const NamedArg& arg) : num_inputs_(arg.num_inputs), num_outputs_(arg.num_outputs), generation_(0) {}
 
   virtual ~Function() {}
 
   // Performs the forward calculation and the computational graph growth.
-  const TensorSharedPtr Call(const TensorSharedPtr input_tensor_ptr);
+  const std::vector<TensorSharedPtr> Call(const std::vector<TensorSharedPtr>& input_tensor_ptrs);
+
+  const std::vector<TensorSharedPtr> Call(const TensorSharedPtr input_tensor_ptr);
 
   // Performs the forward calculation of this function.
   // NOTE: Use this fuction with initialization, instead of assignment, in order to avoid copying the returned value.
-  //   * OK: `const xt::xarray<float> y = Forward(x);` ... No copy happens.
-  //   * NG: `xt::xarray<float> y;  y = Forward(x);` ... Copy happens.
-  virtual const xt::xarray<float> Forward(const xt::xarray<float>& x) const = 0;
+  //   * OK: `const std::vector<xt::xarray<float>> ys = Forward(xs);` ... No copy happens.
+  //   * NG: `std::vector<xt::xarray<float>> ys;  ys = Forward(xs);` ... Copy happens.
+  // TODO: Maybe change the input argument type to `const std::vector<std::reference_wrapper<xt::xarray<float>>>&` ?
+  virtual const std::vector<xt::xarray<float>> Forward(const std::vector<xt::xarray<float>>& xs) const = 0;
 
   // Performs the backward calculation of this function.
   // NOTE: Use this fuction with initialization, instead of assignment, in order to avoid copying the returned value.
-  //   * OK: `const xt::xarray<float> dL_dx = Backward(dL_dy);` ... No copy happens.
-  //   * NG: `xt::xarray<float> dL_dx;  dL_dx = Backward(dL_dy);` ... Copy happens.
-  virtual const xt::xarray<float> Backward(const xt::xarray<float>& dL_dy) const = 0;
+  //   * OK: `const std::vector<xt::xarray<float>> dL_dxs = Backward(dL_dys);` ... No copy happens.
+  //   * NG: `std::vector<xt::xarray<float>> dL_dxs;  dL_dxs = Backward(dL_dys);` ... Copy happens.
+  // TODO: Maybe change the input argument type to `const std::vector<std::reference_wrapper<xt::xarray<float>>>&` ?
+  virtual const std::vector<xt::xarray<float>> Backward(const std::vector<xt::xarray<float>>& dL_dys) const = 0;
 
-  const TensorSharedPtr input_tensor_ptr() const { return input_tensor_ptr_; }
+  const std::size_t num_inputs() const { return  num_inputs_; }
 
-  const TensorWeakPtr output_tensor_ptr() const { return output_tensor_ptr_; }
+  const std::size_t num_outputs() const { return  num_outputs_; }
+
+  const std::vector<TensorSharedPtr>& input_tensor_ptrs() const { return input_tensor_ptrs_; }
+
+  const std::vector<TensorWeakPtr>& output_tensor_ptrs() const { return output_tensor_ptrs_; }
+
+  const int generation() const { return generation_; }
 
  protected:
-  TensorSharedPtr input_tensor_ptr_;
+  std::size_t num_inputs_;
 
-  TensorWeakPtr output_tensor_ptr_;
+  std::size_t num_outputs_;
+
+  std::vector<TensorSharedPtr> input_tensor_ptrs_;
+
+  std::vector<TensorWeakPtr> output_tensor_ptrs_;
+
+  int generation_;
 };
 
 }  // namespace tensorward::core

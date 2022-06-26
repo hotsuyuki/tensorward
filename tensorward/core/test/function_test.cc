@@ -1,53 +1,57 @@
 #include "tensorward/core/function.h"
 
-#include <algorithm>
-
 #include <gtest/gtest.h>
+#include <xtensor/xbuilder.hpp>
 #include <xtensor/xrandom.hpp>
 
-#include "tensorward/function/square.h"
+#include "tensorward/core/tensor.h"
+#include "tensorward/core/operator/add.h"
 
 namespace tensorward::core {
 
 namespace {
 
-constexpr unsigned int kHight = 2;
-constexpr unsigned int kWidth = 3;
+constexpr int kHight = 2;
+constexpr int kWidth = 3;
 
 }  // namespace
 
 class FunctionTest : public ::testing::Test {
  protected:
   FunctionTest()
-      : input_tensor_ptr_(std::make_shared<Tensor>(xt::random::rand<float>({kHight, kWidth}))),
-        square_function_ptr_(std::make_shared<function::Square>()) {}
+      : input_tensor_ptr0_(AsTensorSharedPtr(xt::random::rand<float>({kHight, kWidth}))),
+        input_tensor_ptr1_(AsTensorSharedPtr(xt::random::rand<float>({kHight, kWidth}))) {}
 
-  const TensorSharedPtr input_tensor_ptr_;
-  const FunctionSharedPtr square_function_ptr_;
+  const TensorSharedPtr input_tensor_ptr0_;
+  const TensorSharedPtr input_tensor_ptr1_;
 };
 
 TEST_F(FunctionTest, CallTest) {
-  const TensorSharedPtr output_tensor_ptr = square_function_ptr_->Call(input_tensor_ptr_);
+  // out = in0 + in1
+  const FunctionSharedPtr add_function_ptr = std::make_shared<Add>();
+  const std::vector<TensorSharedPtr> output_tensor_ptrs =
+      add_function_ptr->Call({input_tensor_ptr0_, input_tensor_ptr1_});
+  ASSERT_EQ(output_tensor_ptrs.size(), 1);
 
   // Checks that the forward calculation is correct.
-  const xt::xarray<float>& actual_output_data = output_tensor_ptr->data();
-  xt::xarray<float> expected_output_data(input_tensor_ptr_->data());
-  std::for_each(expected_output_data.begin(), expected_output_data.end(), [](float& elem) { elem = elem * elem; });
+  const xt::xarray<float>& actual_output_data = output_tensor_ptrs[0]->data();
+  const xt::xarray<float> expected_output_data = input_tensor_ptr0_->data() + input_tensor_ptr1_->data();
   EXPECT_EQ(actual_output_data, expected_output_data);
 
   // Checks that the computational graph is correct.
   //
   // The correct computational graph is:
-  //    input_tensor <--- this_function <==> output_tensor
+  //    input_tensors <--- this_function <==> output_tensors
   //
   // The code below checks it with the following order:
-  // 1. input_tensor      this_function <--- output_tensor
-  // 2. input_tensor <--- this_function      output_tensor
-  // 3. input_tensor      this_function ---> output_tensor
+  // 1. input_tensors      this_function <--- output_tensors
+  // 2. input_tensors <--- this_function      output_tensors
+  // 3. input_tensors      this_function ---> output_tensors
   //
-  EXPECT_EQ(output_tensor_ptr->parent_function_ptr(), square_function_ptr_);
-  EXPECT_EQ(square_function_ptr_->input_tensor_ptr(), input_tensor_ptr_);
-  EXPECT_EQ(square_function_ptr_->output_tensor_ptr().lock(), output_tensor_ptr);
+  EXPECT_EQ(output_tensor_ptrs[0]->parent_function_ptr(), add_function_ptr);
+  EXPECT_EQ(add_function_ptr->input_tensor_ptrs()[0], input_tensor_ptr0_);
+  EXPECT_EQ(add_function_ptr->input_tensor_ptrs()[1], input_tensor_ptr1_);
+  EXPECT_EQ(add_function_ptr->output_tensor_ptrs()[0].lock(), output_tensor_ptrs[0]);
 }
 
 }  // namespace tensorward::core

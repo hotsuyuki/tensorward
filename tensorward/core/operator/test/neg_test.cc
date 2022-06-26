@@ -1,7 +1,5 @@
-#include "tensorward/function/square.h"
+#include "tensorward/core/operator/neg.h"
 
-#include <algorithm>
-#include <cmath>
 #include <vector>
 
 #include <gtest/gtest.h>
@@ -10,7 +8,7 @@
 
 #include "tensorward/util/numerical_gradient.h"
 
-namespace tensorward::function {
+namespace tensorward::core {
 
 namespace {
 
@@ -20,74 +18,74 @@ constexpr float kEpsilon = 1.0e-3;
 
 }  // namespace
 
-class SquareTest : public ::testing::Test {
+class NegTest : public ::testing::Test {
  protected:
-  SquareTest()
+  NegTest()
       : input_data_(xt::random::rand<float>({kHight, kWidth})),
-        expected_output_data_(xt::square(input_data_)),
-        square_function_ptr_(std::make_shared<Square>()) {}
+        expected_output_data_(-input_data_),
+        neg_function_ptr_(std::make_shared<Neg>()) {}
 
   const xt::xarray<float> input_data_;
   const xt::xarray<float> expected_output_data_;
-  const core::FunctionSharedPtr square_function_ptr_;
+  const FunctionSharedPtr neg_function_ptr_;
 };
 
-TEST_F(SquareTest, ForwardTest) {
-  const std::vector<xt::xarray<float>> actual_output_datas = square_function_ptr_->Forward({input_data_});
+TEST_F(NegTest, ForwardTest) {
+  const std::vector<xt::xarray<float>> actual_output_datas = neg_function_ptr_->Forward({input_data_});
   ASSERT_EQ(actual_output_datas.size(), 1);
 
   // Checks that the forward calculation is correct.
   EXPECT_EQ(actual_output_datas[0], expected_output_data_);
 }
 
-TEST_F(SquareTest, AnalyticalBackwardTest) {
+TEST_F(NegTest, AnalyticalBackwardTest) {
   // NOTE: Need to use `Call()` instead of `Forward()` in order to create the computational graph for `Backward()`.
-  const std::vector<core::TensorSharedPtr> actual_output_tensors =
-      square_function_ptr_->Call({core::AsTensorSharedPtr(input_data_)});
+  const std::vector<TensorSharedPtr> actual_output_tensors = neg_function_ptr_->Call({AsTensorSharedPtr(input_data_)});
   ASSERT_EQ(actual_output_tensors.size(), 1);
 
   const std::vector<xt::xarray<float>> actual_output_grads({xt::ones_like(actual_output_tensors[0]->data())});
-  const std::vector<xt::xarray<float>> actual_input_grads = square_function_ptr_->Backward(actual_output_grads);
+  const std::vector<xt::xarray<float>> actual_input_grads = neg_function_ptr_->Backward(actual_output_grads);
   ASSERT_EQ(actual_input_grads.size(), 1);
 
-  // y = x^2 ---> dy_dx = 2x
-  const xt::xarray<float> expected_input_grad = 2.0 * input_data_;
+  // y = -x ---> dy_dx = -1
+  const xt::xarray<float> expected_input_grad = -xt::ones_like(input_data_);
 
   // Checks that the backward calculation is correct (analytically).
   EXPECT_EQ(actual_input_grads[0], expected_input_grad);
 }
 
-TEST_F(SquareTest, NumericalBackwardTest) {
+TEST_F(NegTest, NumericalBackwardTest) {
   // NOTE: Need to use `Call()` instead of `Forward()` in order to create the computational graph for `Backward()`.
-  const std::vector<core::TensorSharedPtr> actual_output_tensors =
-      square_function_ptr_->Call({core::AsTensorSharedPtr(input_data_)});
+  const std::vector<TensorSharedPtr> actual_output_tensors = neg_function_ptr_->Call({AsTensorSharedPtr(input_data_)});
   ASSERT_EQ(actual_output_tensors.size(), 1);
 
   const std::vector<xt::xarray<float>> actual_output_grads({xt::ones_like(actual_output_tensors[0]->data())});
-  const std::vector<xt::xarray<float>> actual_input_grads = square_function_ptr_->Backward(actual_output_grads);
+  const std::vector<xt::xarray<float>> actual_input_grads = neg_function_ptr_->Backward(actual_output_grads);
   ASSERT_EQ(actual_input_grads.size(), 1);
 
   const std::vector<xt::xarray<float>> expected_input_grads =
-      util::NumericalGradient(square_function_ptr_, {input_data_}, kEpsilon);
+      util::NumericalGradient(neg_function_ptr_, {input_data_}, kEpsilon);
   ASSERT_EQ(expected_input_grads.size(), 1);
 
   // Checks that the backward calculation is correct (numerically).
   ASSERT_EQ(actual_input_grads.size(), expected_input_grads.size());
-  ASSERT_EQ(actual_input_grads[0].shape(), expected_input_grads[0].shape());
-  ASSERT_EQ(actual_input_grads[0].shape(0), kHight);
-  ASSERT_EQ(actual_input_grads[0].shape(1), kWidth);
-  for (std::size_t i = 0; i < kHight; ++i) {
-    for (std::size_t j = 0; j < kWidth; ++j) {
-      EXPECT_NEAR(actual_input_grads[0](i, j), expected_input_grads[0](i, j), kEpsilon);
+  for (std::size_t n = 0; n < expected_input_grads.size(); ++n) {
+    ASSERT_EQ(actual_input_grads[n].shape(), expected_input_grads[n].shape());
+    ASSERT_EQ(actual_input_grads[n].shape(0), kHight);
+    ASSERT_EQ(actual_input_grads[n].shape(1), kWidth);
+    for (std::size_t i = 0; i < kHight; ++i) {
+      for (std::size_t j = 0; j < kWidth; ++j) {
+        EXPECT_NEAR(actual_input_grads[n](i, j), expected_input_grads[n](i, j), kEpsilon);
+      }
     }
   }
 }
 
-TEST_F(SquareTest, CallWrapperTest) {
-  const core::TensorSharedPtr input_tensor_ptr = core::AsTensorSharedPtr(input_data_);
+TEST_F(NegTest, CallWrapperTest) {
+  const TensorSharedPtr input_tensor_ptr = AsTensorSharedPtr(input_data_);
 
-  // `square()` is a `Function::Call()` wrapper.
-  const core::TensorSharedPtr output_tensor_ptr = square(input_tensor_ptr);
+  // `neg()` is a `Function::Call()` wrapper.
+  const TensorSharedPtr output_tensor_ptr = neg(input_tensor_ptr);
 
   // Checks that the output data is correct.
   EXPECT_EQ(output_tensor_ptr->data(), expected_output_data_);
@@ -103,9 +101,18 @@ TEST_F(SquareTest, CallWrapperTest) {
   // 3. input_tensors      this_function ---> output_tensors
   //
   ASSERT_TRUE(output_tensor_ptr->parent_function_ptr());
-  const core::FunctionSharedPtr parent_function_ptr = output_tensor_ptr->parent_function_ptr();
+  const FunctionSharedPtr parent_function_ptr = output_tensor_ptr->parent_function_ptr();
   EXPECT_EQ(parent_function_ptr->input_tensor_ptrs()[0], input_tensor_ptr);
   EXPECT_EQ(parent_function_ptr->output_tensor_ptrs()[0].lock(), output_tensor_ptr);
 }
 
-}  // namespace tensorward::function
+TEST_F(NegTest, OverloadedOperatorTest) {
+  const TensorSharedPtr input_tensor_ptr = AsTensorSharedPtr(input_data_);
+
+  // - Tensor pointer
+  const TensorSharedPtr output_tensor_ptr1 = -input_tensor_ptr;
+  EXPECT_EQ(output_tensor_ptr1->data(), expected_output_data_);
+  EXPECT_EQ(output_tensor_ptr1->parent_function_ptr()->input_tensor_ptrs()[0], input_tensor_ptr);
+}
+
+}  // namespace tensorward::core

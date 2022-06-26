@@ -16,6 +16,7 @@ cc_test(
   deps = [
     ":numerical_gradient",
     "//tensorward/function:exp",
+    "//tensorward/function:pow",
     "//tensorward/function:square",
     "@com_google_googletest//:gtest_main",
     "@xtensor//:xtensor",

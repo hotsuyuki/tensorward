@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <vector>
 
 #include <gtest/gtest.h>
 #include <xtensor/xbuilder.hpp>
@@ -13,8 +14,8 @@ namespace tensorward::function {
 
 namespace {
 
-constexpr unsigned int kHight = 2;
-constexpr unsigned int kWidth = 3;
+constexpr int kHight = 2;
+constexpr int kWidth = 3;
 constexpr float kEpsilon = 1.0e-3;
 
 }  // namespace
@@ -22,51 +23,89 @@ constexpr float kEpsilon = 1.0e-3;
 class ExpTest : public ::testing::Test {
  protected:
   ExpTest()
-      : input_tensor_ptr_(std::make_shared<core::Tensor>(xt::random::rand<float>({kHight, kWidth}))),
-        output_tensor_ptr_(exp(input_tensor_ptr_)) {}
+      : input_data_(xt::random::rand<float>({kHight, kWidth})),
+        expected_output_data_(xt::exp(input_data_)),
+        exp_function_ptr_(std::make_shared<Exp>()) {}
 
-  const core::TensorSharedPtr input_tensor_ptr_;
-  const core::TensorSharedPtr output_tensor_ptr_;
+  const xt::xarray<float> input_data_;
+  const xt::xarray<float> expected_output_data_;
+  const core::FunctionSharedPtr exp_function_ptr_;
 };
 
-TEST_F(ExpTest, AnalyticalForwardTest) {
-  const xt::xarray<float>& actual_output_data = output_tensor_ptr_->data();
+TEST_F(ExpTest, ForwardTest) {
+  const std::vector<xt::xarray<float>> actual_output_datas = exp_function_ptr_->Forward({input_data_});
+  ASSERT_EQ(actual_output_datas.size(), 1);
 
-  xt::xarray<float> expected_output_data(input_tensor_ptr_->data());
-  std::for_each(expected_output_data.begin(), expected_output_data.end(), [](float& elem) { elem = std::exp(elem); });
-
-  // Checks that the forward calculation is correct (analytically).
-  EXPECT_EQ(actual_output_data, expected_output_data);
+  // Checks that the forward calculation is correct.
+  EXPECT_EQ(actual_output_datas[0], expected_output_data_);
 }
 
 TEST_F(ExpTest, AnalyticalBackwardTest) {
-  const core::FunctionSharedPtr exp_function_ptr = output_tensor_ptr_->parent_function_ptr();
-  const xt::xarray<float> actual_input_grad = exp_function_ptr->Backward(xt::ones_like(output_tensor_ptr_->data()));
+  // NOTE: Need to use `Call()` instead of `Forward()` in order to create the computational graph for `Backward()`.
+  const std::vector<core::TensorSharedPtr> actual_output_tensors =
+      exp_function_ptr_->Call({core::AsTensorSharedPtr(input_data_)});
+  ASSERT_EQ(actual_output_tensors.size(), 1);
 
-  xt::xarray<float> expected_input_grad(input_tensor_ptr_->data());
-  std::for_each(expected_input_grad.begin(), expected_input_grad.end(), [](float& elem) { elem = std::exp(elem); });
+  const std::vector<xt::xarray<float>> actual_output_grads({xt::ones_like(actual_output_tensors[0]->data())});
+  const std::vector<xt::xarray<float>> actual_input_grads = exp_function_ptr_->Backward(actual_output_grads);
+  ASSERT_EQ(actual_input_grads.size(), 1);
+
+  // y = exp(x) ---> dy_dx = exp(x)
+  const xt::xarray<float> expected_input_grad = xt::exp(input_data_);
 
   // Checks that the backward calculation is correct (analytically).
-  EXPECT_EQ(actual_input_grad, expected_input_grad);
+  EXPECT_EQ(actual_input_grads[0], expected_input_grad);
 }
 
 TEST_F(ExpTest, NumericalBackwardTest) {
-  const core::FunctionSharedPtr exp_function_ptr = output_tensor_ptr_->parent_function_ptr();
-  const xt::xarray<float> actual_input_grad = exp_function_ptr->Backward(xt::ones_like(output_tensor_ptr_->data()));
+  // NOTE: Need to use `Call()` instead of `Forward()` in order to create the computational graph for `Backward()`.
+  const std::vector<core::TensorSharedPtr> actual_output_tensors =
+      exp_function_ptr_->Call({core::AsTensorSharedPtr(input_data_)});
+  ASSERT_EQ(actual_output_tensors.size(), 1);
 
-  const core::FunctionSharedPtr new_exp_function_ptr = std::make_shared<Exp>();
-  const xt::xarray<float>& input_data = input_tensor_ptr_->data();
-  const xt::xarray<float> expected_input_grad = util::NumericalGradient(new_exp_function_ptr, input_data, kEpsilon);
+  const std::vector<xt::xarray<float>> actual_output_grads({xt::ones_like(actual_output_tensors[0]->data())});
+  const std::vector<xt::xarray<float>> actual_input_grads = exp_function_ptr_->Backward(actual_output_grads);
+  ASSERT_EQ(actual_input_grads.size(), 1);
+
+  const std::vector<xt::xarray<float>> expected_input_grads =
+      util::NumericalGradient(exp_function_ptr_, {input_data_}, kEpsilon);
+  ASSERT_EQ(expected_input_grads.size(), 1);
 
   // Checks that the backward calculation is correct (numerically).
-  ASSERT_EQ(actual_input_grad.shape(), expected_input_grad.shape());
-  ASSERT_EQ(actual_input_grad.shape(0), kHight);
-  ASSERT_EQ(actual_input_grad.shape(1), kWidth);
+  ASSERT_EQ(actual_input_grads.size(), expected_input_grads.size());
+  ASSERT_EQ(actual_input_grads[0].shape(), expected_input_grads[0].shape());
+  ASSERT_EQ(actual_input_grads[0].shape(0), kHight);
+  ASSERT_EQ(actual_input_grads[0].shape(1), kWidth);
   for (std::size_t i = 0; i < kHight; ++i) {
     for (std::size_t j = 0; j < kWidth; ++j) {
-      EXPECT_NEAR(actual_input_grad(i, j), expected_input_grad(i, j), kEpsilon);
+      EXPECT_NEAR(actual_input_grads[0](i, j), expected_input_grads[0](i, j), kEpsilon);
     }
   }
+}
+
+TEST_F(ExpTest, CallWrapperTest) {
+  const core::TensorSharedPtr input_tensor_ptr = core::AsTensorSharedPtr(input_data_);
+
+  // `exp()` is a `Function::Call()` wrapper.
+  const core::TensorSharedPtr output_tensor_ptr = exp(input_tensor_ptr);
+
+  // Checks that the output data is correct.
+  EXPECT_EQ(output_tensor_ptr->data(), expected_output_data_);
+
+  // Checks that the computational graph is correct.
+  //
+  // The correct computational graph is:
+  //    input_tensors <--- this_function <==> output_tensors
+  //
+  // The code below checks it with the following order:
+  // 1. input_tensors      this_function <--- output_tensors
+  // 2. input_tensors <--- this_function      output_tensors
+  // 3. input_tensors      this_function ---> output_tensors
+  //
+  ASSERT_TRUE(output_tensor_ptr->parent_function_ptr());
+  const core::FunctionSharedPtr parent_function_ptr = output_tensor_ptr->parent_function_ptr();
+  EXPECT_EQ(parent_function_ptr->input_tensor_ptrs()[0], input_tensor_ptr);
+  EXPECT_EQ(parent_function_ptr->output_tensor_ptrs()[0].lock(), output_tensor_ptr);
 }
 
 }  // namespace tensorward::function

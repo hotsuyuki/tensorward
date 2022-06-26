@@ -4,8 +4,14 @@ cc_library(
   name = "core",
   hdrs = ["core.h"],
   deps = [
+    "//tensorward/core:config",
     "//tensorward/core:function",
     "//tensorward/core:tensor",
+    "//tensorward/core/operator:add",
+    "//tensorward/core/operator:div",
+    "//tensorward/core/operator:mul",
+    "//tensorward/core/operator:neg",
+    "//tensorward/core/operator:sub",
   ],
   visibility = ["//visibility:public"],
 )
@@ -15,6 +21,7 @@ cc_library(
   hdrs = ["function.h"],
   deps = [
     "//tensorward/function:exp",
+    "//tensorward/function:pow",
     "//tensorward/function:square",
   ],
   visibility = ["//visibility:public"],

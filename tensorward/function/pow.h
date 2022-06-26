@@ -10,13 +10,13 @@
 
 namespace tensorward::function {
 
-class Square : public core::Function {
+class Pow : public core::Function {
  public:
-  Square() : core::Function({.num_inputs = 1, .num_outputs = 1}) {}
+  Pow(const int exponent) : core::Function({.num_inputs = 1, .num_outputs = 1}), exponent_(exponent) {}
 
   const std::vector<xt::xarray<float>> Forward(const std::vector<xt::xarray<float>>& xs) const override {
-    // y = x^2
-    const xt::xarray<float> y = xt::square(xs[0]);
+    // y = x^e
+    const xt::xarray<float> y = xt::pow(xs[0], exponent_);
 
     return {y};
   }
@@ -24,19 +24,24 @@ class Square : public core::Function {
   const std::vector<xt::xarray<float>> Backward(const std::vector<xt::xarray<float>>& dL_dys) const override {
     const xt::xarray<float>& x = input_tensor_ptrs_[0]->data();
 
-    // y = x^2 ---> dy_dx = 2x ---> dL_dx = dL_dy * dy_dx = dL_dy * 2x
-    const xt::xarray<float> dy_dx = 2 * x;
+    // y = x^e ---> dy_dx = e * x^(e - 1) ---> dL_dx = dL_dy * dy_dx = dL_dy * (e * x^(e - 1))
+    const xt::xarray<float> dy_dx = static_cast<float>(exponent_) * xt::pow(x, exponent_ - 1);
     const xt::xarray<float> dL_dx = dL_dys[0] * dy_dx;
 
     return {dL_dx};
   }
+
+  const int exponent() const { return exponent_; }
+
+ private:
+  int exponent_;
 };
 
-const core::TensorSharedPtr square(const core::TensorSharedPtr input_tensor_ptr) {
+const core::TensorSharedPtr pow(const core::TensorSharedPtr input_tensor_ptr, const int exponent) {
   // Creates an function (dynamically in heap memory so that it's accessible even after exiting this scope), and
   // performs the forward calculation and the computational graph growth.
-  const core::FunctionSharedPtr square_function_ptr = std::make_shared<Square>();
-  const std::vector<core::TensorSharedPtr> output_tensor_ptrs = square_function_ptr->Call(input_tensor_ptr);
+  const core::FunctionSharedPtr pow_function_ptr = std::make_shared<Pow>(exponent);
+  const std::vector<core::TensorSharedPtr> output_tensor_ptrs = pow_function_ptr->Call(input_tensor_ptr);
 
   return output_tensor_ptrs[0];
 }
