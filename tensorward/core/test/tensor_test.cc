@@ -1,6 +1,7 @@
 #include "tensorward/core/tensor.h"
 
 #include <algorithm>
+#include <cmath>
 
 #include <gtest/gtest.h>
 #include <xtensor/xbuilder.hpp>
