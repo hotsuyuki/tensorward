@@ -29,4 +29,4 @@ jobs:
           key: ${{ runner.os }}-${{ env.version }}-bazel-cache
 
       - name: Run bazel test
-        run: bazel test //tensorward/... --test_output=all
+        run: bazel test -s //tensorward/... --test_output=all
