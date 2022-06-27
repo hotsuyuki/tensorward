@@ -20,10 +20,12 @@ jobs:
 
       - name: Cache bazel
         uses: actions/cache@v3
+        # env:
+        #   BAZEL_VERSION: 5.2.0
         with:
           path: |
-            ~/.cache/bazel
-            ~/.cache/bazelisk
+            /private/var/tmp
+          # key: ${{ runner.os }}-${{ env.BAZEL_VERSION }}-bazel-cache
           key: ${{ runner.os }}-bazel-cache
 
       - name: Run bazel test
