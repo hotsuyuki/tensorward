@@ -18,6 +18,7 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@v3
 
+      # TODO: Investigate why "Cache not found for input keys: macOS-bazel-cache" happens in GitHub Actions
       - name: Cache bazel
         uses: actions/cache@v3
         # env:
@@ -25,8 +26,8 @@ jobs:
         with:
           path: |
             /private/var/tmp
-          # key: ${{ runner.os }}-${{ env.BAZEL_VERSION }}-bazel-cache
           key: ${{ runner.os }}-bazel-cache
+          # key: ${{ runner.os }}-${{ env.BAZEL_VERSION }}-bazel-cache
 
       - name: Run bazel test
         run: bazel test //tensorward/... --test_output=all
