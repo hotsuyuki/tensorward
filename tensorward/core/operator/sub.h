@@ -54,12 +54,4 @@ const TensorSharedPtr operator-(const xt::xarray<float>& lhs, const TensorShared
   return AsTensorSharedPtr(lhs) - rhs_ptr;
 }
 
-const TensorSharedPtr operator-(const TensorSharedPtr lhs_ptr, const float rhs) {
-  return lhs_ptr - AsTensorSharedPtr(rhs);
-}
-
-const TensorSharedPtr operator-(const float lhs, const TensorSharedPtr rhs_ptr) {
-  return AsTensorSharedPtr(lhs) - rhs_ptr;
-}
-
 } // namespace tensorward::core

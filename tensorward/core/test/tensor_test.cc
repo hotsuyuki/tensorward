@@ -142,6 +142,7 @@ TEST_F(TensorTest, AsTensorSharedPtrTest) {
 
   // Checks that the Tensor instance constructed from a "0-D" scalar can be accessed via the returned shared pointer,
   // and the data of that Tensor instance is "1-D" scalar.
+  // TODO: Maybe no need to convert 0-D scalar to 1-D ?
   EXPECT_EQ(bar_tensor_ptr.use_count(), 1);
   EXPECT_EQ(bar_tensor_ptr->data(), scalar_data_1D);
   EXPECT_EQ(bar_tensor_ptr->grad_opt(), std::nullopt);

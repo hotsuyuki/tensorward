@@ -98,8 +98,4 @@ const TensorSharedPtr AsTensorSharedPtr(const xt::xarray<float>& data, const std
   return std::make_shared<Tensor>(data, name);
 }
 
-const TensorSharedPtr AsTensorSharedPtr(const float data, const std::string& name /* = "" */) {
-  return AsTensorSharedPtr(xt::xarray<float>(data), name);
-}
-
 }  // namespace tensorward::core

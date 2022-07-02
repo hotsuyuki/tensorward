@@ -142,12 +142,14 @@ TEST_F(SubTest, OverloadedOperatorTest) {
   const float input_scalar1 = input_data1_(0, 0);
 
   // Tensor pointer - Scalar object
+  // (Scalar object will be silently converted to Array object)
   const TensorSharedPtr output_tensor_ptr4 = input_tensor_ptr0 - input_scalar1;
   EXPECT_EQ(output_tensor_ptr4->data(), input_data0_ - input_scalar1);
   EXPECT_EQ(output_tensor_ptr4->parent_function_ptr()->input_tensor_ptrs()[0], input_tensor_ptr0);
   EXPECT_NE(output_tensor_ptr4->parent_function_ptr()->input_tensor_ptrs()[1], input_tensor_ptr1);
 
   // Scalar object - Tensor pointer
+  // (Scalar object will be silently converted to Array object)
   const TensorSharedPtr output_tensor_ptr5 = input_scalar0 - input_tensor_ptr1;
   EXPECT_EQ(output_tensor_ptr5->data(), input_scalar0 - input_data1_);
   EXPECT_NE(output_tensor_ptr5->parent_function_ptr()->input_tensor_ptrs()[0], input_tensor_ptr0);
