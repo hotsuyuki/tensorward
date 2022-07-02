@@ -20,13 +20,13 @@ int main(int argc, char* argv[]) {
 
   y_ptr->Backpropagation();
 
-  DEBUG_PRINT(y_ptr);  // Should print "data: { 0.04 }"
+  DEBUG_PRINT(y_ptr);  // It should print "data: 0.04"
   std::cout << std::endl;
 
-  DEBUG_PRINT(x0_ptr);  // Should print "data: { 1.0 }, grad: { 0.04 }"
+  DEBUG_PRINT(x0_ptr);  // It should print "data: 1.0, grad: 0.04"
   std::cout << std::endl;
 
-  DEBUG_PRINT(x1_ptr);  // Should print "data: { 1.0 }, grad: { 0.04 }"
+  DEBUG_PRINT(x1_ptr);  // It should print "data: 1.0, grad: 0.04"
   std::cout << std::endl;
 
   return EXIT_SUCCESS;

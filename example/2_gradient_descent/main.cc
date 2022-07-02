@@ -37,7 +37,7 @@ int main(int argc, char* argv[]) {
 
   std::cout << "------------------------------------" << std::endl << std::endl;
 
-  DEBUG_PRINT(x_ptr);  // Should print "data: { 1.000001 }, grad: { SOME_SMALL_VALUE }"
+  DEBUG_PRINT(x_ptr);  // It should print "data: 1.000001, grad: SOME_SMALL_VALUE"
   std::cout << std::endl;
 
   return EXIT_SUCCESS;

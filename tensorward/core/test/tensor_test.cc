@@ -120,33 +120,30 @@ TEST_F(TensorTest, SetParentFunctionPtrTest) {
 
 TEST_F(TensorTest, AsTensorSharedPtrTest) {
   const xt::xarray<float> array_data = xt::random::rand<float>({kHight, kWidth});
-
-  const std::string foo = "foo";
-  const TensorSharedPtr foo_tensor_ptr = AsTensorSharedPtr(array_data, foo);
+  const std::string foo_name = "foo";
+  const TensorSharedPtr foo_tensor_ptr = AsTensorSharedPtr(array_data, foo_name);
 
   // Checks that the Tensor instance constructed from an array can be accessed via the returned shared pointer.
   EXPECT_EQ(foo_tensor_ptr.use_count(), 1);
   EXPECT_EQ(foo_tensor_ptr->data(), array_data);
+  EXPECT_EQ(foo_tensor_ptr->data().dimension(), 2);
+  EXPECT_EQ(foo_tensor_ptr->data().size(), kHight * kWidth);
   EXPECT_EQ(foo_tensor_ptr->grad_opt(), std::nullopt);
-  EXPECT_EQ(foo_tensor_ptr->name(), foo);
+  EXPECT_EQ(foo_tensor_ptr->name(), foo_name);
   EXPECT_EQ(foo_tensor_ptr->parent_function_ptr(), nullptr);
   EXPECT_EQ(foo_tensor_ptr->generation(), 0);
 
-  const float scalar_data_0D = array_data(0, 0);
-  const xt::xarray<float> scalar_data_1D({scalar_data_0D});
-  ASSERT_EQ(scalar_data_1D.dimension(), 1);
-  ASSERT_EQ(scalar_data_1D(0), scalar_data_0D);
+  const float scalar_data = array_data(0, 0);
+  const std::string bar_name = "bar";
+  const TensorSharedPtr bar_tensor_ptr = AsTensorSharedPtr(scalar_data, bar_name);
 
-  const std::string bar = "bar";
-  const TensorSharedPtr bar_tensor_ptr = AsTensorSharedPtr(scalar_data_0D, bar);
-
-  // Checks that the Tensor instance constructed from a "0-D" scalar can be accessed via the returned shared pointer,
-  // and the data of that Tensor instance is "1-D" scalar.
-  // TODO: Maybe no need to convert 0-D scalar to 1-D ?
+  // Checks that the Tensor instance constructed from a "0-D" scalar can be accessed via the returned shared pointer.
   EXPECT_EQ(bar_tensor_ptr.use_count(), 1);
-  EXPECT_EQ(bar_tensor_ptr->data(), scalar_data_1D);
+  EXPECT_EQ(bar_tensor_ptr->data(), xt::xarray<float>(scalar_data));
+  EXPECT_EQ(bar_tensor_ptr->data().dimension(), 0);
+  EXPECT_EQ(bar_tensor_ptr->data().size(), 1);
   EXPECT_EQ(bar_tensor_ptr->grad_opt(), std::nullopt);
-  EXPECT_EQ(bar_tensor_ptr->name(), bar);
+  EXPECT_EQ(bar_tensor_ptr->name(), bar_name);
   EXPECT_EQ(bar_tensor_ptr->parent_function_ptr(), nullptr);
   EXPECT_EQ(bar_tensor_ptr->generation(), 0);
 }

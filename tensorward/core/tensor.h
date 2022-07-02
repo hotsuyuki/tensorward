@@ -16,11 +16,7 @@ namespace tensorward::core {
 
 class Tensor {
  public:
-  // TODO: Maybe no need to convert 0-D scalar to 1-D ?
-  Tensor(const xt::xarray<float>& data, const std::string& name = "")
-      : data_(data.dimension() == 0 ? xt::xarray<float>({data(0)}) : data),  // Converts to 1-D if it's 0-D scalar.
-        name_(name),
-        generation_(0) {}
+  Tensor(const xt::xarray<float>& data, const std::string& name = "") : data_(data), name_(name), generation_(0) {}
 
   // TODO: Change to a virtual destructor when inheriting.
   ~Tensor() {}
