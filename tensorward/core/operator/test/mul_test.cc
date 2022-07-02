@@ -41,7 +41,7 @@ TEST_F(MulTest, ForwardTest) {
   EXPECT_EQ(actual_output_datas[0], expected_output_data_);
 }
 
-TEST_F(MulTest, AnalyticalBackwardTest) {
+TEST_F(MulTest, BackwardTest) {
   // NOTE: Need to use `Call()` instead of `Forward()` in order to create the computational graph for `Backward()`.
   const std::vector<TensorSharedPtr> actual_input_tensors(
       {AsTensorSharedPtr(input_data0_), AsTensorSharedPtr(input_data1_)});
@@ -61,32 +61,20 @@ TEST_F(MulTest, AnalyticalBackwardTest) {
   // Checks that the backward calculation is correct (analytically).
   EXPECT_EQ(actual_input_grads[0], expected_input_grad0);
   EXPECT_EQ(actual_input_grads[1], expected_input_grad1);
-}
 
-TEST_F(MulTest, NumericalBackwardTest) {
-  // NOTE: Need to use `Call()` instead of `Forward()` in order to create the computational graph for `Backward()`.
-  const std::vector<TensorSharedPtr> actual_input_tensors(
-      {AsTensorSharedPtr(input_data0_), AsTensorSharedPtr(input_data1_)});
-  const std::vector<TensorSharedPtr> actual_output_tensors = mul_function_ptr_->Call(actual_input_tensors);
-  ASSERT_EQ(actual_output_tensors.size(), 1);
-
-  const std::vector<xt::xarray<float>> actual_output_grads({xt::ones_like(actual_output_tensors[0]->data())});
-  const std::vector<xt::xarray<float>> actual_input_grads = mul_function_ptr_->Backward(actual_output_grads);
-  ASSERT_EQ(actual_input_grads.size(), 2);
-
-  const std::vector<xt::xarray<float>> expected_input_grads =
+  const std::vector<xt::xarray<float>> expected_input_grads_numerical =
       util::NumericalGradient(mul_function_ptr_, {input_data0_, input_data1_}, kEpsilon);
-  ASSERT_EQ(expected_input_grads.size(), 2);
+  ASSERT_EQ(expected_input_grads_numerical.size(), 2);
 
   // Checks that the backward calculation is correct (numerically).
-  ASSERT_EQ(actual_input_grads.size(), expected_input_grads.size());
-  for (std::size_t n = 0; n < expected_input_grads.size(); ++n) {
-    ASSERT_EQ(actual_input_grads[n].shape(), expected_input_grads[n].shape());
+  ASSERT_EQ(actual_input_grads.size(), expected_input_grads_numerical.size());
+  for (std::size_t n = 0; n < expected_input_grads_numerical.size(); ++n) {
+    ASSERT_EQ(actual_input_grads[n].shape(), expected_input_grads_numerical[n].shape());
     ASSERT_EQ(actual_input_grads[n].shape(0), kHight);
     ASSERT_EQ(actual_input_grads[n].shape(1), kWidth);
     for (std::size_t i = 0; i < kHight; ++i) {
       for (std::size_t j = 0; j < kWidth; ++j) {
-        EXPECT_NEAR(actual_input_grads[n](i, j), expected_input_grads[n](i, j), kEpsilon);
+        EXPECT_NEAR(actual_input_grads[n](i, j), expected_input_grads_numerical[n](i, j), kEpsilon);
       }
     }
   }
