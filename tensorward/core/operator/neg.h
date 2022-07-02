@@ -33,7 +33,7 @@ const TensorSharedPtr neg(const TensorSharedPtr input_tensor_ptr) {
   // Creates an function (dynamically in heap memory so that it's accessible even after exiting this scope), and
   // performs the forward calculation and the computational graph growth.
   const FunctionSharedPtr neg_function_ptr = std::make_shared<Neg>();
-  const std::vector<TensorSharedPtr> output_tensor_ptrs = neg_function_ptr->Call(input_tensor_ptr);
+  const std::vector<TensorSharedPtr> output_tensor_ptrs = neg_function_ptr->Call({input_tensor_ptr});
 
   return output_tensor_ptrs[0];
 }

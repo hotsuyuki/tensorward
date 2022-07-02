@@ -24,8 +24,6 @@ class Function : public std::enable_shared_from_this<Function> {
   // Performs the forward calculation and the computational graph growth.
   const std::vector<TensorSharedPtr> Call(const std::vector<TensorSharedPtr>& input_tensor_ptrs);
 
-  const std::vector<TensorSharedPtr> Call(const TensorSharedPtr input_tensor_ptr);
-
   // Performs the forward calculation of this function.
   // NOTE: Use this fuction with initialization, instead of assignment, in order to avoid copying the returned value.
   //   * OK: `const std::vector<xt::xarray<float>> ys = Forward(xs);` ... No copy happens.

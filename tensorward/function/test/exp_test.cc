@@ -33,7 +33,8 @@ class ExpTest : public ::testing::Test {
 };
 
 TEST_F(ExpTest, ForwardTest) {
-  const std::vector<xt::xarray<float>> actual_output_datas = exp_function_ptr_->Forward({input_data_});
+  const std::vector<xt::xarray<float>> actual_input_datas({input_data_});
+  const std::vector<xt::xarray<float>> actual_output_datas = exp_function_ptr_->Forward(actual_input_datas);
   ASSERT_EQ(actual_output_datas.size(), 1);
 
   // Checks that the forward calculation is correct.
@@ -42,8 +43,8 @@ TEST_F(ExpTest, ForwardTest) {
 
 TEST_F(ExpTest, AnalyticalBackwardTest) {
   // NOTE: Need to use `Call()` instead of `Forward()` in order to create the computational graph for `Backward()`.
-  const std::vector<core::TensorSharedPtr> actual_output_tensors =
-      exp_function_ptr_->Call({core::AsTensorSharedPtr(input_data_)});
+  const std::vector<core::TensorSharedPtr> actual_input_tensors({core::AsTensorSharedPtr(input_data_)});
+  const std::vector<core::TensorSharedPtr> actual_output_tensors = exp_function_ptr_->Call(actual_input_tensors);
   ASSERT_EQ(actual_output_tensors.size(), 1);
 
   const std::vector<xt::xarray<float>> actual_output_grads({xt::ones_like(actual_output_tensors[0]->data())});
@@ -59,8 +60,8 @@ TEST_F(ExpTest, AnalyticalBackwardTest) {
 
 TEST_F(ExpTest, NumericalBackwardTest) {
   // NOTE: Need to use `Call()` instead of `Forward()` in order to create the computational graph for `Backward()`.
-  const std::vector<core::TensorSharedPtr> actual_output_tensors =
-      exp_function_ptr_->Call({core::AsTensorSharedPtr(input_data_)});
+  const std::vector<core::TensorSharedPtr> actual_input_tensors({core::AsTensorSharedPtr(input_data_)});
+  const std::vector<core::TensorSharedPtr> actual_output_tensors = exp_function_ptr_->Call(actual_input_tensors);
   ASSERT_EQ(actual_output_tensors.size(), 1);
 
   const std::vector<xt::xarray<float>> actual_output_grads({xt::ones_like(actual_output_tensors[0]->data())});

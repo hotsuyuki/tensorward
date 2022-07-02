@@ -31,7 +31,8 @@ class NegTest : public ::testing::Test {
 };
 
 TEST_F(NegTest, ForwardTest) {
-  const std::vector<xt::xarray<float>> actual_output_datas = neg_function_ptr_->Forward({input_data_});
+  const std::vector<xt::xarray<float>> actual_input_datas({input_data_});
+  const std::vector<xt::xarray<float>> actual_output_datas = neg_function_ptr_->Forward(actual_input_datas);
   ASSERT_EQ(actual_output_datas.size(), 1);
 
   // Checks that the forward calculation is correct.
@@ -40,7 +41,8 @@ TEST_F(NegTest, ForwardTest) {
 
 TEST_F(NegTest, AnalyticalBackwardTest) {
   // NOTE: Need to use `Call()` instead of `Forward()` in order to create the computational graph for `Backward()`.
-  const std::vector<TensorSharedPtr> actual_output_tensors = neg_function_ptr_->Call({AsTensorSharedPtr(input_data_)});
+  const std::vector<TensorSharedPtr> actual_input_tensors({AsTensorSharedPtr(input_data_)});
+  const std::vector<TensorSharedPtr> actual_output_tensors = neg_function_ptr_->Call(actual_input_tensors);
   ASSERT_EQ(actual_output_tensors.size(), 1);
 
   const std::vector<xt::xarray<float>> actual_output_grads({xt::ones_like(actual_output_tensors[0]->data())});
@@ -56,7 +58,8 @@ TEST_F(NegTest, AnalyticalBackwardTest) {
 
 TEST_F(NegTest, NumericalBackwardTest) {
   // NOTE: Need to use `Call()` instead of `Forward()` in order to create the computational graph for `Backward()`.
-  const std::vector<TensorSharedPtr> actual_output_tensors = neg_function_ptr_->Call({AsTensorSharedPtr(input_data_)});
+  const std::vector<TensorSharedPtr> actual_input_tensors({AsTensorSharedPtr(input_data_)});
+  const std::vector<TensorSharedPtr> actual_output_tensors = neg_function_ptr_->Call(actual_input_tensors);
   ASSERT_EQ(actual_output_tensors.size(), 1);
 
   const std::vector<xt::xarray<float>> actual_output_grads({xt::ones_like(actual_output_tensors[0]->data())});

@@ -33,7 +33,8 @@ class SubTest : public ::testing::Test {
 };
 
 TEST_F(SubTest, ForwardTest) {
-  const std::vector<xt::xarray<float>> actual_output_datas = sub_function_ptr_->Forward({input_data0_, input_data1_});
+  const std::vector<xt::xarray<float>> actual_input_datas({input_data0_, input_data1_});
+  const std::vector<xt::xarray<float>> actual_output_datas = sub_function_ptr_->Forward(actual_input_datas);
   ASSERT_EQ(actual_output_datas.size(), 1);
 
   // Checks that the forward calculation is correct.
@@ -42,8 +43,9 @@ TEST_F(SubTest, ForwardTest) {
 
 TEST_F(SubTest, AnalyticalBackwardTest) {
   // NOTE: Need to use `Call()` instead of `Forward()` in order to create the computational graph for `Backward()`.
-  const std::vector<TensorSharedPtr> actual_output_tensors =
-      sub_function_ptr_->Call({AsTensorSharedPtr(input_data0_), AsTensorSharedPtr(input_data1_)});
+  const std::vector<TensorSharedPtr> actual_input_tensors(
+      {AsTensorSharedPtr(input_data0_), AsTensorSharedPtr(input_data1_)});
+  const std::vector<TensorSharedPtr> actual_output_tensors = sub_function_ptr_->Call(actual_input_tensors);
   ASSERT_EQ(actual_output_tensors.size(), 1);
 
   const std::vector<xt::xarray<float>> actual_output_grads({xt::ones_like(actual_output_tensors[0]->data())});
@@ -63,8 +65,9 @@ TEST_F(SubTest, AnalyticalBackwardTest) {
 
 TEST_F(SubTest, NumericalBackwardTest) {
   // NOTE: Need to use `Call()` instead of `Forward()` in order to create the computational graph for `Backward()`.
-  const std::vector<TensorSharedPtr> actual_output_tensors =
-      sub_function_ptr_->Call({AsTensorSharedPtr(input_data0_), AsTensorSharedPtr(input_data1_)});
+  const std::vector<TensorSharedPtr> actual_input_tensors(
+      {AsTensorSharedPtr(input_data0_), AsTensorSharedPtr(input_data1_)});
+  const std::vector<TensorSharedPtr> actual_output_tensors = sub_function_ptr_->Call(actual_input_tensors);
   ASSERT_EQ(actual_output_tensors.size(), 1);
 
   const std::vector<xt::xarray<float>> actual_output_grads({xt::ones_like(actual_output_tensors[0]->data())});

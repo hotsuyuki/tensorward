@@ -34,7 +34,8 @@ TEST_F(PowTest, ForwardTest) {
   for (int exponent = kExponentLower; exponent < kExponentUpper; ++exponent) {
     const core::FunctionSharedPtr pow_function_ptr = std::make_shared<Pow>(exponent);
 
-    const std::vector<xt::xarray<float>> actual_output_datas = pow_function_ptr->Forward({input_data_});
+    const std::vector<xt::xarray<float>> actual_input_datas({input_data_});
+    const std::vector<xt::xarray<float>> actual_output_datas = pow_function_ptr->Forward(actual_input_datas);
     ASSERT_EQ(actual_output_datas.size(), 1);
 
     // Checks that the forward calculation is correct.
@@ -48,8 +49,8 @@ TEST_F(PowTest, AnalyticalBackwardTest) {
     const core::FunctionSharedPtr pow_function_ptr = std::make_shared<Pow>(exponent);
 
     // NOTE: Need to use `Call()` instead of `Forward()` in order to create the computational graph for `Backward()`.
-    const std::vector<core::TensorSharedPtr> actual_output_tensors =
-        pow_function_ptr->Call({core::AsTensorSharedPtr(input_data_)});
+    const std::vector<core::TensorSharedPtr> actual_input_tensors({core::AsTensorSharedPtr(input_data_)});
+    const std::vector<core::TensorSharedPtr> actual_output_tensors = pow_function_ptr->Call(actual_input_tensors);
     ASSERT_EQ(actual_output_tensors.size(), 1);
 
     const std::vector<xt::xarray<float>> actual_output_grads({xt::ones_like(actual_output_tensors[0]->data())});
@@ -69,8 +70,8 @@ TEST_F(PowTest, NumericalBackwardTest) {
     const core::FunctionSharedPtr pow_function_ptr = std::make_shared<Pow>(exponent);
 
     // NOTE: Need to use `Call()` instead of `Forward()` in order to create the computational graph for `Backward()`.
-    const std::vector<core::TensorSharedPtr> actual_output_tensors =
-        pow_function_ptr->Call({core::AsTensorSharedPtr(input_data_)});
+    const std::vector<core::TensorSharedPtr> actual_input_tensors({core::AsTensorSharedPtr(input_data_)});
+    const std::vector<core::TensorSharedPtr> actual_output_tensors = pow_function_ptr->Call(actual_input_tensors);
     ASSERT_EQ(actual_output_tensors.size(), 1);
 
     const std::vector<xt::xarray<float>> actual_output_grads({xt::ones_like(actual_output_tensors[0]->data())});

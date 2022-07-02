@@ -52,8 +52,4 @@ const std::vector<TensorSharedPtr> Function::Call(const std::vector<TensorShared
   return output_tensor_ptrs;
 }
 
-const std::vector<TensorSharedPtr> Function::Call(const TensorSharedPtr input_tensor_ptr) {
-  return Call(std::vector<TensorSharedPtr>({input_tensor_ptr}));
-}
-
 }  // namespace tensorward::core
