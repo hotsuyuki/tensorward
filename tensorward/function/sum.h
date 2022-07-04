@@ -18,8 +18,6 @@ class Sum : public core::Function {
       : core::Function({.num_inputs = 1, .num_outputs = 1}), axes_opt_(axes_opt), does_keep_dims_(does_keep_dims) {}
 
   const std::vector<xt::xarray<float>> Forward(const std::vector<xt::xarray<float>>& xs) override {
-    input_shape_ = xs[0].shape();
-
     // NOTE: Ternary operator like `y = does_keep_dims_ ? xt::sum(x, xt::keep_dims) : xt::sum(x);` doesn't work,
     // NOTE: so we use if-else statement instead. 
     xt::xarray<float> y;
@@ -60,13 +58,14 @@ class Sum : public core::Function {
     //
     // TODO: Maybe port this code block to tensorward/util as a function so that it can be unit tested ?
     //
-    const std::size_t input_dimension = input_shape_.size();
-    if (1 <= input_dimension && axes_opt_.has_value() && !does_keep_dims_) {
+    const xt::xarray<float>::shape_type& x_shape = input_tensor_ptrs_[0]->data().shape();
+    const std::size_t x_dimension = x_shape.size();
+    if (1 <= x_dimension && axes_opt_.has_value() && !does_keep_dims_) {
       // Convert the axes from `xt::xarray<float>::shape_type` to `std::list` in order to be sorted in ascending order.
       // e.g. {-1, 0} ---> {0, 2} ... suppose that the input dimension is 3.
       std::list<int> ascending_axes;
       for (const auto& axis : axes_opt_.value()) {
-        ascending_axes.push_back(0 <= axis ? axis : axis + input_dimension);
+        ascending_axes.push_back(0 <= axis ? axis : axis + x_dimension);
       }
       ascending_axes.sort();
       
@@ -82,16 +81,16 @@ class Sum : public core::Function {
       dL_dy.reshape(shape);
     }
 
-    const xt::xarray<float> dL_dx = xt::broadcast(dL_dy, input_shape_);
+    const xt::xarray<float> dL_dx = xt::broadcast(dL_dy, x_shape);
 
     return {dL_dx};
   }
 
-  const xt::xarray<float>::shape_type& input_shape() const { return input_shape_; }
+  const std::optional<xt::xarray<float>::shape_type>& axes_opt() const { return axes_opt_; }
+
+  const bool does_keep_dims() const { return does_keep_dims_; }
 
  private:
-  xt::xarray<float>::shape_type input_shape_;
-
   std::optional<xt::xarray<float>::shape_type> axes_opt_;
 
   bool does_keep_dims_;

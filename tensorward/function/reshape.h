@@ -16,8 +16,6 @@ class Reshape : public core::Function {
       : core::Function({.num_inputs = 1, .num_outputs = 1}), output_shape_(output_shape) {}
 
   const std::vector<xt::xarray<float>> Forward(const std::vector<xt::xarray<float>>& xs) override {
-    input_shape_ = xs[0].shape();
-
     xt::xarray<float> y = xs[0];
     y.reshape(output_shape_);
 
@@ -26,18 +24,15 @@ class Reshape : public core::Function {
 
   const std::vector<xt::xarray<float>> Backward(const std::vector<xt::xarray<float>>& dL_dys) override {
     xt::xarray<float> dL_dx = dL_dys[0];
-    dL_dx.reshape(input_shape_);
+    const xt::xarray<float>::shape_type& x_shape = input_tensor_ptrs_[0]->data().shape();
+    dL_dx.reshape(x_shape);
 
     return {dL_dx};
   }
 
-  const xt::xarray<float>::shape_type& input_shape() const { return input_shape_; }
-
   const xt::xarray<float>::shape_type& output_shape() const { return output_shape_; }
 
  private:
-  xt::xarray<float>::shape_type input_shape_;
-
   xt::xarray<float>::shape_type output_shape_;
 };
 
