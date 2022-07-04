@@ -4,7 +4,6 @@
 #include <vector>
 
 #include <xtensor/xarray.hpp>
-#include <xtensor/xmath.hpp>
 
 #include "tensorward/core/function.h"
 #include "tensorward/core/tensor.h"
@@ -15,14 +14,14 @@ class Div : public Function {
  public:
   Div() : Function({.num_inputs = 2, .num_outputs = 1}) {}
 
-  const std::vector<xt::xarray<float>> Forward(const std::vector<xt::xarray<float>>& xs) const override {
+  const std::vector<xt::xarray<float>> Forward(const std::vector<xt::xarray<float>>& xs) override {
     // y = x0 / x1
     const xt::xarray<float> y = xs[0] / xs[1];
 
     return {y};
   }
 
-  const std::vector<xt::xarray<float>> Backward(const std::vector<xt::xarray<float>>& dL_dys) const override {
+  const std::vector<xt::xarray<float>> Backward(const std::vector<xt::xarray<float>>& dL_dys) override {
     const xt::xarray<float>& x0 = input_tensor_ptrs_[0]->data();
     const xt::xarray<float>& x1 = input_tensor_ptrs_[1]->data();
 

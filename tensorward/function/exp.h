@@ -1,9 +1,9 @@
 #pragma once
 
 #include <memory>
+#include <vector>
 
 #include <xtensor/xarray.hpp>
-#include <xtensor/xmath.hpp>
 
 #include "tensorward/core/function.h"
 #include "tensorward/core/tensor.h"
@@ -14,14 +14,14 @@ class Exp : public core::Function {
  public:
   Exp() : core::Function({.num_inputs = 1, .num_outputs = 1}) {}
 
-  const std::vector<xt::xarray<float>> Forward(const std::vector<xt::xarray<float>>& xs) const override {
+  const std::vector<xt::xarray<float>> Forward(const std::vector<xt::xarray<float>>& xs) override {
     // y = exp(x)
     const xt::xarray<float> y = xt::exp(xs[0]);
 
     return {y};
   }
 
-  const std::vector<xt::xarray<float>> Backward(const std::vector<xt::xarray<float>>& dL_dys) const override {
+  const std::vector<xt::xarray<float>> Backward(const std::vector<xt::xarray<float>>& dL_dys) override {
     // y = exp(x) ---> dy_dx = exp(x) = y ---> dL_dx = dL_dy * dy_dx = dL_dy * exp(x) = dL_dy * y
     const xt::xarray<float>& dy_dx = output_tensor_ptrs_[0].lock()->data();
     const xt::xarray<float> dL_dx = dL_dys[0] * dy_dx;

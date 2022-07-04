@@ -14,14 +14,14 @@ class Neg : public Function {
  public:
   Neg() : Function({.num_inputs = 1, .num_outputs = 1}) {}
 
-  const std::vector<xt::xarray<float>> Forward(const std::vector<xt::xarray<float>>& xs) const override {
+  const std::vector<xt::xarray<float>> Forward(const std::vector<xt::xarray<float>>& xs) override {
     // y = -x
     const xt::xarray<float> y = -xs[0];
 
     return {y};
   }
 
-  const std::vector<xt::xarray<float>> Backward(const std::vector<xt::xarray<float>>& dL_dys) const override {
+  const std::vector<xt::xarray<float>> Backward(const std::vector<xt::xarray<float>>& dL_dys) override {
     // y = -x ---> dy_dx = -1 ---> dL_dx = dL_dy * dy_dx = dL_dy * (-1) = -dL_dy
     const xt::xarray<float> dL_dx = -dL_dys[0];
 

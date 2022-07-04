@@ -29,14 +29,14 @@ class Function : public std::enable_shared_from_this<Function> {
   //   * OK: `const std::vector<xt::xarray<float>> ys = Forward(xs);` ... No copy happens.
   //   * NG: `std::vector<xt::xarray<float>> ys;  ys = Forward(xs);` ... Copy happens.
   // TODO: Maybe change the input argument type to `const std::vector<std::reference_wrapper<xt::xarray<float>>>&` ?
-  virtual const std::vector<xt::xarray<float>> Forward(const std::vector<xt::xarray<float>>& xs) const = 0;
+  virtual const std::vector<xt::xarray<float>> Forward(const std::vector<xt::xarray<float>>& xs) = 0;
 
   // Performs the backward calculation of this function.
   // NOTE: Use this fuction with initialization, instead of assignment, in order to avoid copying the returned value.
   //   * OK: `const std::vector<xt::xarray<float>> dL_dxs = Backward(dL_dys);` ... No copy happens.
   //   * NG: `std::vector<xt::xarray<float>> dL_dxs;  dL_dxs = Backward(dL_dys);` ... Copy happens.
   // TODO: Maybe change the input argument type to `const std::vector<std::reference_wrapper<xt::xarray<float>>>&` ?
-  virtual const std::vector<xt::xarray<float>> Backward(const std::vector<xt::xarray<float>>& dL_dys) const = 0;
+  virtual const std::vector<xt::xarray<float>> Backward(const std::vector<xt::xarray<float>>& dL_dys) = 0;
 
   const std::size_t num_inputs() const { return  num_inputs_; }
 

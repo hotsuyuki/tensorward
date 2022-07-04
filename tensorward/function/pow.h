@@ -1,9 +1,9 @@
 #pragma once
 
 #include <memory>
+#include <vector>
 
 #include <xtensor/xarray.hpp>
-#include <xtensor/xmath.hpp>
 
 #include "tensorward/core/function.h"
 #include "tensorward/core/tensor.h"
@@ -14,14 +14,14 @@ class Pow : public core::Function {
  public:
   Pow(const int exponent) : core::Function({.num_inputs = 1, .num_outputs = 1}), exponent_(exponent) {}
 
-  const std::vector<xt::xarray<float>> Forward(const std::vector<xt::xarray<float>>& xs) const override {
+  const std::vector<xt::xarray<float>> Forward(const std::vector<xt::xarray<float>>& xs) override {
     // y = x^e
     const xt::xarray<float> y = xt::pow(xs[0], exponent_);
 
     return {y};
   }
 
-  const std::vector<xt::xarray<float>> Backward(const std::vector<xt::xarray<float>>& dL_dys) const override {
+  const std::vector<xt::xarray<float>> Backward(const std::vector<xt::xarray<float>>& dL_dys) override {
     const xt::xarray<float>& x = input_tensor_ptrs_[0]->data();
 
     // y = x^e ---> dy_dx = e * x^(e - 1) ---> dL_dx = dL_dy * dy_dx = dL_dy * (e * x^(e - 1))

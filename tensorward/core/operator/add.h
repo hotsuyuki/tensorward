@@ -14,14 +14,14 @@ class Add : public Function {
  public:
   Add() : Function({.num_inputs = 2, .num_outputs = 1}) {}
 
-  const std::vector<xt::xarray<float>> Forward(const std::vector<xt::xarray<float>>& xs) const override {
+  const std::vector<xt::xarray<float>> Forward(const std::vector<xt::xarray<float>>& xs) override {
     // y = x0 + x1
     const xt::xarray<float> y = xs[0] + xs[1];
 
     return {y};
   }
 
-  const std::vector<xt::xarray<float>> Backward(const std::vector<xt::xarray<float>>& dL_dys) const override {
+  const std::vector<xt::xarray<float>> Backward(const std::vector<xt::xarray<float>>& dL_dys) override {
     // y = x0 + x1 ---> dy_dx0 = 1 ---> dL_dx0 = dL_dy * dy_dx0 = dL_dy * 1 = dL_dy
     const xt::xarray<float>& dL_dx0 = dL_dys[0];
 
