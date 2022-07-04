@@ -1,9 +1,6 @@
 #include "tensorward/core/operator/mul.h"
 
-#include <vector>
-
 #include <gtest/gtest.h>
-#include <xtensor/xbuilder.hpp>
 #include <xtensor/xrandom.hpp>
 
 #include "tensorward/util/numerical_gradient.h"
@@ -51,6 +48,12 @@ TEST_F(MulTest, BackwardTest) {
   const std::vector<xt::xarray<float>> actual_output_grads({xt::ones_like(actual_output_tensors[0]->data())});
   const std::vector<xt::xarray<float>> actual_input_grads = mul_function_ptr_->Backward(actual_output_grads);
   ASSERT_EQ(actual_input_grads.size(), 2);
+
+  // Checks that the shape of the gradient is the same as the shape of the corresponding data.
+  ASSERT_EQ(actual_input_grads.size(), actual_input_tensors.size());
+  for (std::size_t i = 0; i < actual_input_grads.size(); ++i) {
+    EXPECT_EQ(actual_input_grads[i].shape(), actual_input_tensors[i]->data().shape());
+  }
 
   // y = x0 * x1 ---> dy_dx0 = x1
   const xt::xarray<float> expected_input_grad0 = input_data1_;

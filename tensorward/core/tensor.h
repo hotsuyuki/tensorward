@@ -27,6 +27,14 @@ class Tensor {
   // Clears the gradient.
   void ClearGrad() { grad_opt_ = std::nullopt; }
 
+  // TODO: Implement `Reshape(output_shape)` by calling `tensorward::function::reshape(this, output_shape)`.
+
+  // TODO: Implement `Transpose()` by calling `tensorward::function::transpose(this)`.
+
+  // TODO: Implement `Sum()` by calling `tensorward::function::sum(this, axes_opt, does_keep_dims)`.
+
+  // TODO: Maybe implement `shape()`, `dimension()` , `size()`, ... etc. by delegating to `xt::xarray<>` functions?
+
   void SeData(const xt::xarray<float>& data) { data_ = data; }
 
   // TODO: Maybe add `void SetGrad(xt::xarray<float>& grad)` ?

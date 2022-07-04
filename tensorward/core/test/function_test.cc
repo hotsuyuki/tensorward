@@ -1,7 +1,6 @@
 #include "tensorward/core/function.h"
 
 #include <gtest/gtest.h>
-#include <xtensor/xbuilder.hpp>
 #include <xtensor/xrandom.hpp>
 
 #include "tensorward/core/tensor.h"

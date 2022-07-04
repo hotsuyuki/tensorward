@@ -4,7 +4,6 @@
 #include <cmath>
 
 #include <gtest/gtest.h>
-#include <xtensor/xbuilder.hpp>
 #include <xtensor/xrandom.hpp>
 
 #include "tensorward/core/function.h"

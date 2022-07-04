@@ -4,8 +4,6 @@
 #include <set>
 #include <vector>
 
-#include <xtensor/xbuilder.hpp>
-
 #include "tensorward/core/function.h"
 
 namespace tensorward::core {
@@ -72,6 +70,7 @@ void Tensor::Backpropagation(const bool does_retain_grad /* = false */) {
       } else {
         input_tensor_ptrs[i]->SetGradOpt(input_tensor_ptrs[i]->grad() + dL_dxs[i]);
       }
+      assert(input_tensor_ptrs[i]->grad().shape() == input_tensor_ptrs[i]->data().shape());
 
       // If the parent function exists and hasn't been appended before, then appends it into the backward queue.
       if (input_tensor_ptrs[i]->parent_function_ptr()) {
