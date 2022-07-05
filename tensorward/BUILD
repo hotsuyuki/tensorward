@@ -32,6 +32,7 @@ cc_library(
   hdrs = ["util.h"],
   deps = [
     "//tensorward/util:numerical_gradient",
+    "//tensorward/util:xtensor_sum_to",
   ],
   visibility = ["//visibility:public"],
 )

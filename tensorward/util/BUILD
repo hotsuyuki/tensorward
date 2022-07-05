@@ -10,6 +10,15 @@ cc_library(
   visibility = ["//visibility:public"],
 )
 
+cc_library(
+  name = "xtensor_sum_to",
+  hdrs = ["xtensor_sum_to.h"],
+  deps = [
+    "@xtensor//:xtensor",
+  ],
+  visibility = ["//visibility:public"],
+)
+
 cc_test(
   name = "numerical_gradient_test",
   srcs = ["test/numerical_gradient_test.cc"],
@@ -18,6 +27,16 @@ cc_test(
     "//tensorward/function:exp",
     "//tensorward/function:pow",
     "//tensorward/function:square",
+    "@com_google_googletest//:gtest_main",
+    "@xtensor//:xtensor",
+  ],
+)
+
+cc_test(
+  name = "xtensor_sum_to_test",
+  srcs = ["test/xtensor_sum_to_test.cc"],
+  deps = [
+    ":xtensor_sum_to",
     "@com_google_googletest//:gtest_main",
     "@xtensor//:xtensor",
   ],

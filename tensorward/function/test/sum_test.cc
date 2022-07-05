@@ -56,7 +56,7 @@ TEST_F(SumTest, BackwardTest) {
 }
 
 TEST_F(SumTest, BackwardWithAxesButWithoutKeepDimsFlagTest) {
-  const xt::xarray<float>::shape_type axes = {1};
+  const xt::xarray<float>::shape_type axes({1});
   const bool does_keep_dims = false;
   const core::FunctionSharedPtr sum_function_ptr = std::make_shared<Sum>(axes, does_keep_dims);
 
