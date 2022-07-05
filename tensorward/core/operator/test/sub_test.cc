@@ -118,7 +118,7 @@ TEST_F(SubTest, BroadcastTest) {
 
   // y = x0 - x1 ---> dy_dx1 = -1 ... but need to be summed due to the broadcast in the forward calculation.
   xt::xarray<float> expected_input_grad_broadcast = -xt::ones_like(expected_output_data_broadcast);
-  expected_input_grad_broadcast = util::XtensorSumTo(expected_input_grad_broadcast, input_data_broadcast.shape());
+  expected_input_grad_broadcast = xt::sum(expected_input_grad_broadcast, {0}, xt::keep_dims);
 
   // Checks that the backward calculation is correct (analytically).
   EXPECT_EQ(actual_input_grads[0], expected_input_grad0);
