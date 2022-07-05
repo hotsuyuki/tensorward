@@ -7,7 +7,7 @@ namespace tensorward::util {
 
 namespace {
 
-constexpr int kHight = 2;
+constexpr int kHeight = 2;
 constexpr int kWidth = 3;
 
 }  // namespace
@@ -15,7 +15,7 @@ constexpr int kWidth = 3;
 class XtensorSumToTest : public ::testing::Test {
  protected:
   XtensorSumToTest()
-      : input_data_(xt::random::rand<float>({kHight, kWidth})) {}
+      : input_data_(xt::random::rand<float>({kHeight, kWidth})) {}
 
   const xt::xarray<float> input_data_;
 };
@@ -39,7 +39,7 @@ TEST_F(XtensorSumToTest, SumAlongWithAxis0Test) {
 }
 
 TEST_F(XtensorSumToTest, SumAlongWithAxis1Test) {
-  const xt::xarray<float>::shape_type output_shape_2D_kHeight_1({kHight, 1});
+  const xt::xarray<float>::shape_type output_shape_2D_kHeight_1({kHeight, 1});
   const xt::xarray<float> actual_output_data_2D_kHeight_1 = XtensorSumTo(input_data_, output_shape_2D_kHeight_1);
   const xt::xarray<float> expected_output_data_2D_kHeight_1 = xt::sum(input_data_, {1}, xt::keep_dims);
 

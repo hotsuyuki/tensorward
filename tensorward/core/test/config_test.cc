@@ -11,7 +11,7 @@ namespace tensorward::core {
 
 namespace {
 
-constexpr int kHight = 2;
+constexpr int kHeight = 2;
 constexpr int kWidth = 3;
 
 }  // namespace
@@ -19,7 +19,7 @@ constexpr int kWidth = 3;
 class ConfigTest : public ::testing::Test {
  protected:
   ConfigTest()
-      : input_tensor_ptr_(AsTensorSharedPtr(xt::random::rand<float>({kHight, kWidth}))) {}
+      : input_tensor_ptr_(AsTensorSharedPtr(xt::random::rand<float>({kHeight, kWidth}))) {}
 
   const TensorSharedPtr input_tensor_ptr_;
 };

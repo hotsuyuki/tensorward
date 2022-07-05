@@ -7,7 +7,7 @@ namespace tensorward::function {
 
 namespace {
 
-constexpr int kHight = 2;
+constexpr int kHeight = 2;
 constexpr int kWidth = 3;
 
 }  // namespace
@@ -15,8 +15,8 @@ constexpr int kWidth = 3;
 class ReshapeTest : public ::testing::Test {
  protected:
   ReshapeTest()
-      : input_data_(xt::random::rand<float>({kHight, kWidth})),
-        output_shape_({1, kHight * kWidth}),
+      : input_data_(xt::random::rand<float>({kHeight, kWidth})),
+        output_shape_({1, kHeight * kWidth}),
         reshape_function_ptr_(std::make_shared<Reshape>(output_shape_)) {
     expected_output_data_ = input_data_;
     expected_output_data_.reshape(output_shape_);

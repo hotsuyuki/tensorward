@@ -9,7 +9,7 @@ namespace tensorward::function {
 
 namespace {
 
-constexpr int kHight = 2;
+constexpr int kHeight = 2;
 constexpr int kWidth = 3;
 constexpr float kEpsilon = 1.0e-3;
 constexpr int kExponentLower = -5;
@@ -20,7 +20,7 @@ constexpr int kExponentUpper = 5;
 class PowTest : public ::testing::Test {
  protected:
   PowTest()
-      : input_data_(xt::random::rand<float>({kHight, kWidth})) {}
+      : input_data_(xt::random::rand<float>({kHeight, kWidth})) {}
 
   const xt::xarray<float> input_data_;
 };
@@ -72,9 +72,9 @@ TEST_F(PowTest, BackwardTest) {
     ASSERT_EQ(actual_input_grads.size(), expected_input_grads_numerical.size());
     for (std::size_t n = 0; n < expected_input_grads_numerical.size(); ++n) {
       ASSERT_EQ(actual_input_grads[n].shape(), expected_input_grads_numerical[n].shape());
-      ASSERT_EQ(actual_input_grads[n].shape(0), kHight);
+      ASSERT_EQ(actual_input_grads[n].shape(0), kHeight);
       ASSERT_EQ(actual_input_grads[n].shape(1), kWidth);
-      for (std::size_t i = 0; i < kHight; ++i) {
+      for (std::size_t i = 0; i < kHeight; ++i) {
         for (std::size_t j = 0; j < kWidth; ++j) {
           // Sets the tolerance as (100 * kEpsilon)% of the expected value.
           const float tolerance = std::abs(expected_input_grads_numerical[n](i, j) * kEpsilon);

@@ -14,7 +14,7 @@ namespace tensorward::util {
 
 namespace {
 
-constexpr int kHight = 2;
+constexpr int kHeight = 2;
 constexpr int kWidth = 3;
 constexpr float kEpsilon = 1.0e-3;
 constexpr int kExponentLower = -5;
@@ -25,8 +25,8 @@ constexpr int kExponentUpper = 5;
 class NumericalGradientTest : public ::testing::Test {
  protected:
   NumericalGradientTest()
-      : input_data0_(xt::random::rand<float>({kHight, kWidth})),
-        input_data1_(xt::random::rand<float>({kHight, kWidth})) {}
+      : input_data0_(xt::random::rand<float>({kHeight, kWidth})),
+        input_data1_(xt::random::rand<float>({kHeight, kWidth})) {}
 
   const xt::xarray<float> input_data0_;
   const xt::xarray<float> input_data1_;
@@ -43,9 +43,9 @@ TEST_F(NumericalGradientTest, ExpTest) {
 
   // Checks that the numerical gradient is close to the analytical gradient.
   ASSERT_EQ(actual_grads[0].shape(), expected_grad.shape());
-  ASSERT_EQ(actual_grads[0].shape(0), kHight);
+  ASSERT_EQ(actual_grads[0].shape(0), kHeight);
   ASSERT_EQ(actual_grads[0].shape(1), kWidth);
-  for (std::size_t i = 0; i < kHight; ++i) {
+  for (std::size_t i = 0; i < kHeight; ++i) {
     for (std::size_t j = 0; j < kWidth; ++j) {
       EXPECT_NEAR(actual_grads[0](i, j), expected_grad(i, j), kEpsilon);
     }
@@ -65,9 +65,9 @@ TEST_F(NumericalGradientTest, PowTest) {
 
     // Checks that the numerical gradient is close to the analytical gradient.
     ASSERT_EQ(actual_grads[0].shape(), expected_grad.shape());
-    ASSERT_EQ(actual_grads[0].shape(0), kHight);
+    ASSERT_EQ(actual_grads[0].shape(0), kHeight);
     ASSERT_EQ(actual_grads[0].shape(1), kWidth);
-    for (std::size_t i = 0; i < kHight; ++i) {
+    for (std::size_t i = 0; i < kHeight; ++i) {
       for (std::size_t j = 0; j < kWidth; ++j) {
         // Sets the tolerance as (100 * kEpsilon)% of the expected value.
         const float tolerance = std::abs(expected_grad(i, j) * kEpsilon);
@@ -88,9 +88,9 @@ TEST_F(NumericalGradientTest, SquareTest) {
 
   // Checks that the numerical gradient is close to the analytical gradient.
   ASSERT_EQ(actual_grads[0].shape(), expected_grad.shape());
-  ASSERT_EQ(actual_grads[0].shape(0), kHight);
+  ASSERT_EQ(actual_grads[0].shape(0), kHeight);
   ASSERT_EQ(actual_grads[0].shape(1), kWidth);
-  for (std::size_t i = 0; i < kHight; ++i) {
+  for (std::size_t i = 0; i < kHeight; ++i) {
     for (std::size_t j = 0; j < kWidth; ++j) {
       EXPECT_NEAR(actual_grads[0](i, j), expected_grad(i, j), kEpsilon);
     }

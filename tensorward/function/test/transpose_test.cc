@@ -7,7 +7,7 @@ namespace tensorward::function {
 
 namespace {
 
-constexpr int kHight = 2;
+constexpr int kHeight = 2;
 constexpr int kWidth = 3;
 
 }  // namespace
@@ -15,7 +15,7 @@ constexpr int kWidth = 3;
 class TransposeTest : public ::testing::Test {
  protected:
   TransposeTest()
-      : input_data_(xt::random::rand<float>({kHight, kWidth})),
+      : input_data_(xt::random::rand<float>({kHeight, kWidth})),
         expected_output_data_(xt::transpose(input_data_)),
         transpose_function_ptr_(std::make_shared<Transpose>()) {}
 

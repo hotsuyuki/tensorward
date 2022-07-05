@@ -14,7 +14,7 @@ namespace tensorward::core {
 
 namespace {
 
-constexpr int kHight = 2;
+constexpr int kHeight = 2;
 constexpr int kWidth = 3;
 
 const float dL_dy(const float y) {
@@ -43,7 +43,7 @@ const float dL_dx(const float x) {
 class TensorTest : public ::testing::Test {
  protected:
   TensorTest()
-      : x_tensor_ptr_(AsTensorSharedPtr(xt::random::rand<float>({kHight, kWidth}))),
+      : x_tensor_ptr_(AsTensorSharedPtr(xt::random::rand<float>({kHeight, kWidth}))),
         L_tensor_ptr_(function::exp(function::square(x_tensor_ptr_))) {}
 
   const TensorSharedPtr x_tensor_ptr_;
@@ -105,7 +105,7 @@ TEST_F(TensorTest, BackpropagationTest) {
 }
 
 TEST_F(TensorTest, SetParentFunctionPtrTest) {
-  const xt::xarray<float> array_data = xt::random::rand<float>({kHight, kWidth});
+  const xt::xarray<float> array_data = xt::random::rand<float>({kHeight, kWidth});
   const TensorSharedPtr foo_tensor_ptr = AsTensorSharedPtr(array_data);
   const FunctionSharedPtr bar_function_ptr = std::make_shared<function::Square>();
 
@@ -118,7 +118,7 @@ TEST_F(TensorTest, SetParentFunctionPtrTest) {
 }
 
 TEST_F(TensorTest, AsTensorSharedPtrTest) {
-  const xt::xarray<float> array_data = xt::random::rand<float>({kHight, kWidth});
+  const xt::xarray<float> array_data = xt::random::rand<float>({kHeight, kWidth});
   const std::string foo_name = "foo";
   const TensorSharedPtr foo_tensor_ptr = AsTensorSharedPtr(array_data, foo_name);
 
@@ -126,7 +126,7 @@ TEST_F(TensorTest, AsTensorSharedPtrTest) {
   EXPECT_EQ(foo_tensor_ptr.use_count(), 1);
   EXPECT_EQ(foo_tensor_ptr->data(), array_data);
   EXPECT_EQ(foo_tensor_ptr->data().dimension(), 2);
-  EXPECT_EQ(foo_tensor_ptr->data().size(), kHight * kWidth);
+  EXPECT_EQ(foo_tensor_ptr->data().size(), kHeight * kWidth);
   EXPECT_EQ(foo_tensor_ptr->grad_opt(), std::nullopt);
   EXPECT_EQ(foo_tensor_ptr->name(), foo_name);
   EXPECT_EQ(foo_tensor_ptr->parent_function_ptr(), nullptr);

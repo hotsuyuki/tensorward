@@ -9,7 +9,7 @@ namespace tensorward::core {
 
 namespace {
 
-constexpr int kHight = 2;
+constexpr int kHeight = 2;
 constexpr int kWidth = 3;
 constexpr float kEpsilon = 1.0e-3;
 
@@ -18,7 +18,7 @@ constexpr float kEpsilon = 1.0e-3;
 class NegTest : public ::testing::Test {
  protected:
   NegTest()
-      : input_data_(xt::random::rand<float>({kHight, kWidth})),
+      : input_data_(xt::random::rand<float>({kHeight, kWidth})),
         expected_output_data_(-input_data_),
         neg_function_ptr_(std::make_shared<Neg>()) {}
 
@@ -66,9 +66,9 @@ TEST_F(NegTest, BackwardTest) {
   ASSERT_EQ(actual_input_grads.size(), expected_input_grads_numerical.size());
   for (std::size_t n = 0; n < expected_input_grads_numerical.size(); ++n) {
     ASSERT_EQ(actual_input_grads[n].shape(), expected_input_grads_numerical[n].shape());
-    ASSERT_EQ(actual_input_grads[n].shape(0), kHight);
+    ASSERT_EQ(actual_input_grads[n].shape(0), kHeight);
     ASSERT_EQ(actual_input_grads[n].shape(1), kWidth);
-    for (std::size_t i = 0; i < kHight; ++i) {
+    for (std::size_t i = 0; i < kHeight; ++i) {
       for (std::size_t j = 0; j < kWidth; ++j) {
         EXPECT_NEAR(actual_input_grads[n](i, j), expected_input_grads_numerical[n](i, j), kEpsilon);
       }
