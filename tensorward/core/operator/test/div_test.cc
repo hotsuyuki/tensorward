@@ -86,6 +86,49 @@ TEST_F(DivTest, BackwardTest) {
   }
 }
 
+TEST_F(DivTest, BroadcastTest) {
+  // Prepares another input data to be broadcasted. The size of the 1st dimension is 1 instead of `kHeight` on purpose.
+  const xt::xarray<float> input_data_broadcast(xt::random::rand<float>({1, kWidth}));
+
+  // NOTE: Need to use `Call()` instead of `Forward()` in order to create the computational graph for `Backward()`.
+  const std::vector<TensorSharedPtr> actual_input_tensors(
+      {AsTensorSharedPtr(input_data0_), AsTensorSharedPtr(input_data_broadcast)});
+  const std::vector<TensorSharedPtr> actual_output_tensors = div_function_ptr_->Call(actual_input_tensors);
+  ASSERT_EQ(actual_output_tensors.size(), 1);
+
+  // Checks that the shape of the output data is the same as the shape of the input data whose size is larger,
+  // which means the broadcast happened correctly.
+  EXPECT_TRUE(actual_output_tensors[0]->data().shape() == input_data0_.shape() &&
+              actual_output_tensors[0]->data().shape() != input_data_broadcast.shape());
+
+  // Checks that the forward calculation is correct.
+  const xt::xarray<float> expected_output_data_broadcast = input_data0_ / input_data_broadcast;
+  EXPECT_EQ(actual_output_tensors[0]->data(), expected_output_data_broadcast);
+
+  // The backward calculation.
+  const std::vector<xt::xarray<float>> actual_output_grads({xt::ones_like(actual_output_tensors[0]->data())});
+  const std::vector<xt::xarray<float>> actual_input_grads = div_function_ptr_->Backward(actual_output_grads);
+  ASSERT_EQ(actual_input_grads.size(), 2);
+
+  // Checks that the shape of the gradient is the same as the shape of the corresponding data.
+  EXPECT_TRUE(actual_input_grads[0].shape() == input_data0_.shape() &&
+              actual_input_grads[0].shape() != input_data_broadcast.shape());
+  EXPECT_TRUE(actual_input_grads[1].shape() != input_data0_.shape() &&
+              actual_input_grads[1].shape() == input_data_broadcast.shape());
+
+  // y = x0 / x1 ---> dy_dx0 = x1^(-1) ... but need to be broadcasted due to the broadcast in the forward calculation.
+  xt::xarray<float> expected_input_grad0 = 1.0 / input_data_broadcast;
+  expected_input_grad0 = xt::broadcast(expected_input_grad0, input_data0_.shape());
+
+  // y = x0 / x1 ---> dy_dx1 = -x0 * x1^(-2) ... but need to be summed due to the broadcast in the forward calculation.
+  xt::xarray<float> expected_input_grad_broadcast = -input_data0_ / xt::square(input_data_broadcast);
+  expected_input_grad_broadcast = util::XtensorSumTo(expected_input_grad_broadcast, input_data_broadcast.shape());
+
+  // Checks that the backward calculation is correct (analytically).
+  EXPECT_EQ(actual_input_grads[0], expected_input_grad0);
+  EXPECT_EQ(actual_input_grads[1], expected_input_grad_broadcast);
+}
+
 TEST_F(DivTest, CallWrapperTest) {
   const TensorSharedPtr input_tensor_ptr0 = AsTensorSharedPtr(input_data0_);
   const TensorSharedPtr input_tensor_ptr1 = AsTensorSharedPtr(input_data1_);

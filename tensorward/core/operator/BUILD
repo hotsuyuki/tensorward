@@ -6,6 +6,7 @@ cc_library(
   deps = [
     "//tensorward/core:function",
     "//tensorward/core:tensor",
+    "//tensorward/util:xtensor_sum_to",
     "@xtensor//:xtensor",
   ],
   visibility = ["//visibility:public"],
@@ -17,6 +18,7 @@ cc_library(
   deps = [
     "//tensorward/core:function",
     "//tensorward/core:tensor",
+    "//tensorward/util:xtensor_sum_to",
     "@xtensor//:xtensor",
   ],
   visibility = ["//visibility:public"],
@@ -28,6 +30,7 @@ cc_library(
   deps = [
     "//tensorward/core:function",
     "//tensorward/core:tensor",
+    "//tensorward/util:xtensor_sum_to",
     "@xtensor//:xtensor",
   ],
   visibility = ["//visibility:public"],
@@ -50,6 +53,7 @@ cc_library(
   deps = [
     "//tensorward/core:function",
     "//tensorward/core:tensor",
+    "//tensorward/util:xtensor_sum_to",
     "@xtensor//:xtensor",
   ],
   visibility = ["//visibility:public"],

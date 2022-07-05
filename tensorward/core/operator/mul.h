@@ -7,6 +7,7 @@
 
 #include "tensorward/core/function.h"
 #include "tensorward/core/tensor.h"
+#include "tensorward/util/xtensor_sum_to.h"
 
 namespace tensorward::core {
 
@@ -27,11 +28,20 @@ class Mul : public Function {
 
     // y = x0 * x1 ---> dy_dx0 = x1 ---> dL_dx0 = dL_dy * dy_dx0 = dL_dy * x1
     const xt::xarray<float>& dy_dx0 = x1;
-    const xt::xarray<float> dL_dx0 = dL_dys[0] * dy_dx0;
+    xt::xarray<float> dL_dx0 = dL_dys[0] * dy_dx0;
 
     // y = x0 * x1 ---> dy_dx1 = x0 ---> dL_dx1 = dL_dy * dy_dx1 = dL_dy * x0
     const xt::xarray<float>& dy_dx1 = x0;
-    const xt::xarray<float> dL_dx1 = dL_dys[0] * dy_dx1;
+    xt::xarray<float> dL_dx1 = dL_dys[0] * dy_dx1;
+
+    // Reduces the shape of dL_dx0 or dL_dx1 if either x0 or x1 was broadcasted during the forward calculation.
+    const xt::xarray<float>::shape_type& x0_shape = x0.shape();
+    const xt::xarray<float>::shape_type& x1_shape = x1.shape();
+    const bool is_broadcasted_for_x0_or_x1 = (x0_shape != x1_shape);
+    if (is_broadcasted_for_x0_or_x1) {
+      dL_dx0 = util::XtensorSumTo(dL_dx0, x0_shape);
+      dL_dx1 = util::XtensorSumTo(dL_dx1, x1_shape);
+    }
 
     return {dL_dx0, dL_dx1};
   }
