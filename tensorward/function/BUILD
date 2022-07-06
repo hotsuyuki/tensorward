@@ -1,6 +1,18 @@
 load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
 
 cc_library(
+  name = "broadcast_to",
+  hdrs = ["broadcast_to.h"],
+  deps = [
+    "//tensorward/core:function",
+    "//tensorward/core:tensor",
+    "//tensorward/util:xtensor_sum_to",
+    "@xtensor//:xtensor",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+cc_library(
   name = "exp",
   hdrs = ["exp.h"],
   deps = [
@@ -56,6 +68,18 @@ cc_library(
 )
 
 cc_library(
+  name = "sum_to",
+  hdrs = ["sum_to.h"],
+  deps = [
+    "//tensorward/core:function",
+    "//tensorward/core:tensor",
+    "//tensorward/util:xtensor_sum_to",
+    "@xtensor//:xtensor",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+cc_library(
   name = "transpose",
   hdrs = ["transpose.h"],
   deps = [
@@ -64,6 +88,16 @@ cc_library(
     "@xtensor//:xtensor",
   ],
   visibility = ["//visibility:public"],
+)
+
+cc_test(
+  name = "broadcast_to_test",
+  srcs = ["test/broadcast_to_test.cc"],
+  deps = [
+    ":broadcast_to",
+    "@com_google_googletest//:gtest_main",
+    "@xtensor//:xtensor",
+  ],
 )
 
 cc_test(
@@ -93,7 +127,6 @@ cc_test(
   srcs = ["test/reshape_test.cc"],
   deps = [
     ":reshape",
-    "//tensorward/util:numerical_gradient",
     "@com_google_googletest//:gtest_main",
     "@xtensor//:xtensor",
   ],
@@ -115,7 +148,16 @@ cc_test(
   srcs = ["test/sum_test.cc"],
   deps = [
     ":sum",
-    "//tensorward/util:numerical_gradient",
+    "@com_google_googletest//:gtest_main",
+    "@xtensor//:xtensor",
+  ],
+)
+
+cc_test(
+  name = "sum_to_test",
+  srcs = ["test/sum_to_test.cc"],
+  deps = [
+    ":sum_to",
     "@com_google_googletest//:gtest_main",
     "@xtensor//:xtensor",
   ],
@@ -126,7 +168,6 @@ cc_test(
   srcs = ["test/transpose_test.cc"],
   deps = [
     ":transpose",
-    "//tensorward/util:numerical_gradient",
     "@com_google_googletest//:gtest_main",
     "@xtensor//:xtensor",
   ],
