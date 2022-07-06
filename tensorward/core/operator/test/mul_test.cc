@@ -117,7 +117,7 @@ TEST_F(MulTest, BroadcastTest) {
   xt::xarray<float> expected_input_grad0 = input_data_broadcast;
   expected_input_grad0 = xt::broadcast(expected_input_grad0, input_data0_.shape());
 
-  // y = x0 * x1 ---> dy_dx1 = x0 ... but need to be summed due to the broadcast in the forward calculation.
+  // y = x0 * x1 ---> dy_dx1 = x0 ... but needs to be summed due to the broadcast in the forward calculation.
   xt::xarray<float> expected_input_grad_broadcast = input_data0_;
   expected_input_grad_broadcast = xt::sum(expected_input_grad_broadcast, {0}, xt::keep_dims);
 
