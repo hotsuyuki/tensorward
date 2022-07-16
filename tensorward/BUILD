@@ -20,9 +20,15 @@ cc_library(
   name = "function",
   hdrs = ["function.h"],
   deps = [
+    "//tensorward/function:broadcast_to",
     "//tensorward/function:exp",
+    "//tensorward/function:matmul",
     "//tensorward/function:pow",
+    "//tensorward/function:reshape",
     "//tensorward/function:square",
+    "//tensorward/function:sum",
+    "//tensorward/function:sum_to",
+    "//tensorward/function:transpose",
   ],
   visibility = ["//visibility:public"],
 )
