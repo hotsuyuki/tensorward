@@ -22,3 +22,11 @@ http_archive(
   build_file = "@//:xtensor.BUILD",
   strip_prefix = "xtensor-0.24.0",
 )
+
+http_archive(
+  name = "xtensor-blas",
+  url = "https://github.com/xtensor-stack/xtensor-blas/archive/refs/tags/0.20.0.zip",
+  sha256 = "e8a62c11c0fb912c3028d79879154296ab31c36b61eb3fac42d65aa859fd1f8a",
+  build_file = "@//:xtensor-blas.BUILD",
+  strip_prefix = "xtensor-blas-0.20.0",
+)

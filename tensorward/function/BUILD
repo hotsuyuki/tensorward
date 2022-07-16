@@ -24,6 +24,18 @@ cc_library(
 )
 
 cc_library(
+  name = "matmul",
+  hdrs = ["matmul.h"],
+  deps = [
+    "//tensorward/core:function",
+    "//tensorward/core:tensor",
+    "@xtensor//:xtensor",
+    "@xtensor-blas//:xtensor-blas",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+cc_library(
   name = "pow",
   hdrs = ["pow.h"],
   deps = [
@@ -105,6 +117,17 @@ cc_test(
   srcs = ["test/exp_test.cc"],
   deps = [
     ":exp",
+    "//tensorward/util:numerical_gradient",
+    "@com_google_googletest//:gtest_main",
+    "@xtensor//:xtensor",
+  ],
+)
+
+cc_test(
+  name = "matmul_test",
+  srcs = ["test/matmul_test.cc"],
+  deps = [
+    ":matmul",
     "//tensorward/util:numerical_gradient",
     "@com_google_googletest//:gtest_main",
     "@xtensor//:xtensor",
