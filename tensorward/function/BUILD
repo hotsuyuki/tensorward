@@ -128,7 +128,6 @@ cc_test(
   srcs = ["test/matmul_test.cc"],
   deps = [
     ":matmul",
-    "//tensorward/util:numerical_gradient",
     "@com_google_googletest//:gtest_main",
     "@xtensor//:xtensor",
   ],

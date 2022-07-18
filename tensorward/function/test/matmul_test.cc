@@ -3,14 +3,6 @@
 #include <gtest/gtest.h>
 #include <xtensor/xrandom.hpp>
 
-#include "tensorward/util/numerical_gradient.h"
-
-// TODO: Remove this include after temporary experiment.
-#define DEBUG_PRINT(var) std::cout << #var << " = " << var << std::endl;
-#include <iostream>
-#include <xtensor/xadapt.hpp>
-#include <xtensor/xio.hpp>
-
 namespace tensorward::function {
 
 namespace {
@@ -18,7 +10,6 @@ namespace {
 constexpr int kNumData = 10;
 constexpr int kHeight = 2;
 constexpr int kWidth = 3;
-constexpr float kEpsilon = 1.0e-3;
 
 }  // namespace
 
@@ -73,10 +64,6 @@ TEST_F(MatmulTest, BackwardTest) {
   // Checks that the backward calculation is correct (analytically).
   EXPECT_EQ(actual_input_grads[0], expected_input_grad0);
   EXPECT_EQ(actual_input_grads[1], expected_input_grad1);
-
-  const std::vector<xt::xarray<float>> expected_input_grads_numerical =
-      util::NumericalGradient(matmul_function_ptr_, {input_data0_, input_data1_}, kEpsilon);
-  ASSERT_EQ(expected_input_grads_numerical.size(), 2);
 }
 
 TEST_F(MatmulTest, CallWrapperTest) {
