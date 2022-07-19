@@ -36,6 +36,17 @@ cc_library(
 )
 
 cc_library(
+  name = "mean_squared_error",
+  hdrs = ["mean_squared_error.h"],
+  deps = [
+    "//tensorward/core:function",
+    "//tensorward/core:tensor",
+    "@xtensor//:xtensor",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+cc_library(
   name = "pow",
   hdrs = ["pow.h"],
   deps = [
@@ -128,6 +139,16 @@ cc_test(
   srcs = ["test/matmul_test.cc"],
   deps = [
     ":matmul",
+    "@com_google_googletest//:gtest_main",
+    "@xtensor//:xtensor",
+  ],
+)
+
+cc_test(
+  name = "mean_squared_error_test",
+  srcs = ["test/mean_squared_error_test.cc"],
+  deps = [
+    ":mean_squared_error",
     "@com_google_googletest//:gtest_main",
     "@xtensor//:xtensor",
   ],

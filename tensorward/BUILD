@@ -23,6 +23,7 @@ cc_library(
     "//tensorward/function:broadcast_to",
     "//tensorward/function:exp",
     "//tensorward/function:matmul",
+    "//tensorward/function:mean_squared_error",
     "//tensorward/function:pow",
     "//tensorward/function:reshape",
     "//tensorward/function:square",
