@@ -7,18 +7,18 @@ namespace tensorward::function {
 
 namespace {
 
-constexpr int kNumData = 10;
-constexpr int kInDim = 2;
-constexpr int kOutDim = 3;
+constexpr int kDataSize = 10;
+constexpr int kInSize = 2;
+constexpr int kOutSize = 3;
 
 }  // namespace
 
 class LinearTest : public ::testing::Test {
  protected:
   LinearTest()
-      : input_data0_(xt::random::rand<float>({kNumData, kInDim})),                          // x
-        input_data1_(xt::random::rand<float>({kInDim, kOutDim})),                           // W
-        input_data2_(xt::random::rand<float>({1, kOutDim})),                                // b
+      : input_data0_(xt::random::rand<float>({kDataSize, kInSize})),                        // x
+        input_data1_(xt::random::rand<float>({kInSize, kOutSize})),                         // W
+        input_data2_(xt::random::rand<float>({1, kOutSize})),                               // b
         expected_output_data_(xt::linalg::dot(input_data0_, input_data1_) + input_data2_),  // y = x W + b
         matmul_function_ptr_(std::make_shared<Linear>()) {}
 

@@ -7,17 +7,17 @@ namespace tensorward::function {
 
 namespace {
 
-constexpr int kNumData = 10;
-constexpr int kOutDim = 3;
+constexpr int kDataSize = 10;
+constexpr int kOutSize = 3;
 
 }  // namespace
 
 class MeanSquaredErrorTest : public ::testing::Test {
  protected:
   MeanSquaredErrorTest()
-      : input_data0_(xt::random::rand<float>({kNumData, kOutDim})),
-        input_data1_(xt::random::rand<float>({kNumData, kOutDim})),
-        expected_output_data_(xt::sum(xt::square(input_data0_ - input_data1_)) / kNumData),
+      : input_data0_(xt::random::rand<float>({kDataSize, kOutSize})),
+        input_data1_(xt::random::rand<float>({kDataSize, kOutSize})),
+        expected_output_data_(xt::sum(xt::square(input_data0_ - input_data1_)) / kDataSize),
         mean_squared_error_function_ptr_(std::make_shared<MeanSquaredError>()) {}
 
   const xt::xarray<float> input_data0_;
@@ -57,11 +57,11 @@ TEST_F(MeanSquaredErrorTest, BackwardTest) {
 
   // y = sum((x0 - x1)^2) / N = sum((x0 - x1)^2 / N)
   // ---> dy_dx0 = broadcast_to(1.0, x0_shape) * (2(x0 - x1) / N) = 2(x0 - x1) / N
-  const xt::xarray<float> expected_input_grad0 = 2.0 * (input_data0_ - input_data1_) / kNumData;
+  const xt::xarray<float> expected_input_grad0 = 2.0 * (input_data0_ - input_data1_) / kDataSize;
 
   // y = sum((x0 - x1)^2) / N = sum((x0 - x1)^2 / N)
   // ---> dy_dx1 = broadcast_to(1.0, x1_shape) * (-2(x0 - x1) / N) = -2(x0 - x1) / N
-  const xt::xarray<float> expected_input_grad1 = -2.0 * (input_data0_ - input_data1_) / kNumData;
+  const xt::xarray<float> expected_input_grad1 = -2.0 * (input_data0_ - input_data1_) / kDataSize;
 
   // Checks that the backward calculation is correct (analytically).
   EXPECT_EQ(actual_input_grads[0], expected_input_grad0);

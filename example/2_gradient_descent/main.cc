@@ -12,13 +12,13 @@ namespace tw = tensorward::core;
 namespace F = tensorward::function;
 
 int main(int argc, char* argv[]) {
-  const float learning_rate = 0.01;
-  const std::size_t iterations = 200;
+  constexpr float kLearningRate = 0.01;
+  constexpr std::size_t kIterations = 200;
 
   // x = 2.0
   const tw::TensorSharedPtr x_ptr = tw::AsTensorSharedPtr(2.0, "x");
 
-  for (std::size_t i = 0; i < iterations; ++i) {
+  for (std::size_t i = 0; i < kIterations; ++i) {
     if (i % 10 == 0) {
       DEBUG_PRINT(i);
       DEBUG_PRINT(x_ptr);
@@ -32,7 +32,7 @@ int main(int argc, char* argv[]) {
     y_ptr->Backpropagation();
 
     // x <-- x - lr * dy/dx
-    x_ptr->SeData(x_ptr->data() - learning_rate * x_ptr->grad());
+    x_ptr->SeData(x_ptr->data() - kLearningRate * x_ptr->grad());
   }
 
   std::cout << "------------------------------------" << std::endl << std::endl;
