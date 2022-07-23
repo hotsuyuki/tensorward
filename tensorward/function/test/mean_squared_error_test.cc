@@ -8,15 +8,15 @@ namespace tensorward::function {
 namespace {
 
 constexpr int kNumData = 10;
-constexpr int kWidth = 3;
+constexpr int kOutDim = 3;
 
 }  // namespace
 
 class MeanSquaredErrorTest : public ::testing::Test {
  protected:
   MeanSquaredErrorTest()
-      : input_data0_(xt::random::rand<float>({kNumData, kWidth})),
-        input_data1_(xt::random::rand<float>({kNumData, kWidth})),
+      : input_data0_(xt::random::rand<float>({kNumData, kOutDim})),
+        input_data1_(xt::random::rand<float>({kNumData, kOutDim})),
         expected_output_data_(xt::sum(xt::square(input_data0_ - input_data1_)) / kNumData),
         mean_squared_error_function_ptr_(std::make_shared<MeanSquaredError>()) {}
 

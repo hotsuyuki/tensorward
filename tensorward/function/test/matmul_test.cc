@@ -8,16 +8,16 @@ namespace tensorward::function {
 namespace {
 
 constexpr int kNumData = 10;
-constexpr int kHeight = 2;
-constexpr int kWidth = 3;
+constexpr int kInDim = 2;
+constexpr int kOutDim = 3;
 
 }  // namespace
 
 class MatmulTest : public ::testing::Test {
  protected:
   MatmulTest()
-      : input_data0_(xt::random::rand<float>({kNumData, kHeight})),          // x
-        input_data1_(xt::random::rand<float>({kHeight, kWidth})),            // W
+      : input_data0_(xt::random::rand<float>({kNumData, kInDim})),           // x
+        input_data1_(xt::random::rand<float>({kInDim, kOutDim})),            // W
         expected_output_data_(xt::linalg::dot(input_data0_, input_data1_)),  // y = x W
         matmul_function_ptr_(std::make_shared<Matmul>()) {}
 
