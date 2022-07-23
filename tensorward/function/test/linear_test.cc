@@ -20,18 +20,18 @@ class LinearTest : public ::testing::Test {
         input_data1_(xt::random::rand<float>({kInSize, kOutSize})),                         // W
         input_data2_(xt::random::rand<float>({1, kOutSize})),                               // b
         expected_output_data_(xt::linalg::dot(input_data0_, input_data1_) + input_data2_),  // y = x W + b
-        matmul_function_ptr_(std::make_shared<Linear>()) {}
+        linear_function_ptr_(std::make_shared<Linear>()) {}
 
   const xt::xarray<float> input_data0_;
   const xt::xarray<float> input_data1_;
   const xt::xarray<float> input_data2_;
   const xt::xarray<float> expected_output_data_;
-  const core::FunctionSharedPtr matmul_function_ptr_;
+  const core::FunctionSharedPtr linear_function_ptr_;
 };
 
 TEST_F(LinearTest, ForwardTest) {
   const std::vector<xt::xarray<float>> actual_input_datas({input_data0_, input_data1_, input_data2_});
-  const std::vector<xt::xarray<float>> actual_output_datas = matmul_function_ptr_->Forward(actual_input_datas);
+  const std::vector<xt::xarray<float>> actual_output_datas = linear_function_ptr_->Forward(actual_input_datas);
   ASSERT_EQ(actual_output_datas.size(), 1);
 
   // Checks that the forward calculation is correct.
@@ -43,11 +43,11 @@ TEST_F(LinearTest, BackwardTest) {
   const std::vector<core::TensorSharedPtr> actual_input_tensors({core::AsTensorSharedPtr(input_data0_),
                                                                  core::AsTensorSharedPtr(input_data1_),
                                                                  core::AsTensorSharedPtr(input_data2_)});
-  const std::vector<core::TensorSharedPtr> actual_output_tensors = matmul_function_ptr_->Call(actual_input_tensors);
+  const std::vector<core::TensorSharedPtr> actual_output_tensors = linear_function_ptr_->Call(actual_input_tensors);
   ASSERT_EQ(actual_output_tensors.size(), 1);
 
   const std::vector<xt::xarray<float>> actual_output_grads({xt::ones_like(actual_output_tensors[0]->data())});
-  const std::vector<xt::xarray<float>> actual_input_grads = matmul_function_ptr_->Backward(actual_output_grads);
+  const std::vector<xt::xarray<float>> actual_input_grads = linear_function_ptr_->Backward(actual_output_grads);
   ASSERT_EQ(actual_input_grads.size(), 3);
 
   // Checks that the shape of the gradient is the same as the shape of the corresponding data.
