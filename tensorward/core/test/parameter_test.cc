@@ -37,18 +37,18 @@ TEST_F(ParameterTest, TypeidTest) {
   EXPECT_EQ(typeid(tensor_obj), typeid(Tensor));
   EXPECT_EQ(typeid(parameter_obj), typeid(Parameter));
 
-  const auto& tensor_add_parameter_obj = *(tensor_ptr_ + parameter_ptr_);
-  const auto& tensor_sub_parameter_obj = *(tensor_ptr_ - parameter_ptr_);
-  const auto& tensor_mul_parameter_obj = *(tensor_ptr_ * parameter_ptr_);
-  const auto& tensor_div_parameter_obj = *(tensor_ptr_ / parameter_ptr_);
-  const auto& tensor_matmul_parameter_obj = *(function::mean_squared_error(tensor_ptr_, parameter_ptr_));
+  const auto& add_tensor_parameter_obj = *(tensor_ptr_ + parameter_ptr_);
+  const auto& sub_tensor_parameter_obj = *(tensor_ptr_ - parameter_ptr_);
+  const auto& mul_tensor_parameter_obj = *(tensor_ptr_ * parameter_ptr_);
+  const auto& div_tensor_parameter_obj = *(tensor_ptr_ / parameter_ptr_);
+  const auto& mse_tensor_parameter_obj = *(function::mean_squared_error(tensor_ptr_, parameter_ptr_));
 
   // Checks that the calculation result between `Tensor` class and `Parameter` class is `Tensor` class.
-  EXPECT_EQ(typeid(tensor_add_parameter_obj), typeid(Tensor));
-  EXPECT_EQ(typeid(tensor_sub_parameter_obj), typeid(Tensor));
-  EXPECT_EQ(typeid(tensor_mul_parameter_obj), typeid(Tensor));
-  EXPECT_EQ(typeid(tensor_div_parameter_obj), typeid(Tensor));
-  EXPECT_EQ(typeid(tensor_matmul_parameter_obj), typeid(Tensor));
+  EXPECT_EQ(typeid(add_tensor_parameter_obj), typeid(Tensor));
+  EXPECT_EQ(typeid(sub_tensor_parameter_obj), typeid(Tensor));
+  EXPECT_EQ(typeid(mul_tensor_parameter_obj), typeid(Tensor));
+  EXPECT_EQ(typeid(div_tensor_parameter_obj), typeid(Tensor));
+  EXPECT_EQ(typeid(mse_tensor_parameter_obj), typeid(Tensor));
 }
 
 TEST_F(ParameterTest, AsTensorSharedPtrTest) {
