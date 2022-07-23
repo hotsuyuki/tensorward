@@ -38,9 +38,9 @@ class Function : public std::enable_shared_from_this<Function> {
   // TODO: Maybe change the input argument type to `const std::vector<std::reference_wrapper<xt::xarray<float>>>&` ?
   virtual const std::vector<xt::xarray<float>> Backward(const std::vector<xt::xarray<float>>& dL_dys) = 0;
 
-  const std::size_t num_inputs() const { return  num_inputs_; }
+  const std::size_t num_inputs() const { return num_inputs_; }
 
-  const std::size_t num_outputs() const { return  num_outputs_; }
+  const std::size_t num_outputs() const { return num_outputs_; }
 
   const std::vector<TensorSharedPtr>& input_tensor_ptrs() const { return input_tensor_ptrs_; }
 

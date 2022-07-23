@@ -33,11 +33,13 @@ const std::vector<TensorSharedPtr> Function::Call(const std::vector<TensorShared
                          });
     generation_ = (*max_generation_input_tensor_ptr_itr)->generation();
 
+    // TODO: Refactor this code block so that we don't need the temporary variable `output_tensor_weak_ptrs`.
     // Grows the computational graph with Define-by-Run schema.
     std::vector<TensorWeakPtr> output_tensor_weak_ptrs;
     output_tensor_weak_ptrs.reserve(output_tensor_ptrs.size());
     for (const auto& output_tensor_ptr : output_tensor_ptrs) {
-      output_tensor_weak_ptrs.push_back(output_tensor_ptr);  // Converts from "shared" pointers to "weak" pointers.
+      // Converts from "shared" pointers to "weak" pointers.
+      output_tensor_weak_ptrs.push_back(output_tensor_ptr);
 
       const FunctionSharedPtr this_function_ptr = shared_from_this();
       output_tensor_ptr->SetParentFunctionPtr(this_function_ptr);  // input_tensors     this_function <-- output_tensors
