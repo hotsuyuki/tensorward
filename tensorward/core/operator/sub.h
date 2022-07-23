@@ -23,11 +23,13 @@ class Sub : public Function {
   }
 
   const std::vector<xt::xarray<float>> Backward(const std::vector<xt::xarray<float>>& dL_dys) override {
+    const xt::xarray<float>& dL_dy = dL_dys[0];
+
     // y = x0 - x1 ---> dy_dx0 = 1 ---> dL_dx0 = dL_dy * dy_dx0 = dL_dy * 1 = dL_dy
-    xt::xarray<float> dL_dx0 = dL_dys[0];
+    xt::xarray<float> dL_dx0 = dL_dy;
 
     // y = x0 - x1 ---> dy_dx1 = -1 ---> dL_dx1 = dL_dy * dy_dx1 = dL_dy * (-1) = -dL_dy
-    xt::xarray<float> dL_dx1 = -dL_dys[0];
+    xt::xarray<float> dL_dx1 = -dL_dy;
 
     // Reduces the shape of dL_dx0 or dL_dx1 if either x0 or x1 was broadcasted during the forward calculation.
     const xt::xarray<float>::shape_type& x0_shape = input_tensor_ptrs_[0]->data().shape();

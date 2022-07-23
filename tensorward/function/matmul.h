@@ -26,14 +26,15 @@ class Matmul : public core::Function {
   }
 
   const std::vector<xt::xarray<float>> Backward(const std::vector<xt::xarray<float>>& dL_dys) override {
+    const xt::xarray<float>& dL_dy = dL_dys[0];
     const xt::xarray<float>& x = input_tensor_ptrs_[0]->data();
     const xt::xarray<float>& W = input_tensor_ptrs_[1]->data();
 
     // y = x W ---> dL_dx = dL_dy W.T
-    const xt::xarray<float> dL_dx = xt::linalg::dot(dL_dys[0], xt::transpose(W));
+    const xt::xarray<float> dL_dx = xt::linalg::dot(dL_dy, xt::transpose(W));
 
     // y = x W ---> dL_dW = x.T dL_dy
-    const xt::xarray<float> dL_dW = xt::linalg::dot(xt::transpose(x), dL_dys[0]);
+    const xt::xarray<float> dL_dW = xt::linalg::dot(xt::transpose(x), dL_dy);
 
     return {dL_dx, dL_dW};
   }

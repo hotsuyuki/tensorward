@@ -22,9 +22,11 @@ class Exp : public core::Function {
   }
 
   const std::vector<xt::xarray<float>> Backward(const std::vector<xt::xarray<float>>& dL_dys) override {
+    const xt::xarray<float>& dL_dy = dL_dys[0];
+
     // y = exp(x) ---> dy_dx = exp(x) = y ---> dL_dx = dL_dy * dy_dx = dL_dy * exp(x) = dL_dy * y
     const xt::xarray<float>& dy_dx = output_tensor_ptrs_[0].lock()->data();
-    const xt::xarray<float> dL_dx = dL_dys[0] * dy_dx;
+    const xt::xarray<float> dL_dx = dL_dy * dy_dx;
 
     return {dL_dx};
   }

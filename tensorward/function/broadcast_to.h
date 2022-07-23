@@ -23,8 +23,10 @@ class BroadcastTo : public core::Function {
   }
 
   const std::vector<xt::xarray<float>> Backward(const std::vector<xt::xarray<float>>& dL_dys) override {
+    const xt::xarray<float>& dL_dy = dL_dys[0];
     const xt::xarray<float>::shape_type& x_shape = input_tensor_ptrs_[0]->data().shape();
-    const xt::xarray<float> dL_dx = util::XtensorSumTo(dL_dys[0], x_shape);
+
+    const xt::xarray<float> dL_dx = util::XtensorSumTo(dL_dy, x_shape);
 
     return {dL_dx};
   }

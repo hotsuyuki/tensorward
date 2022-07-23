@@ -22,8 +22,10 @@ class Neg : public Function {
   }
 
   const std::vector<xt::xarray<float>> Backward(const std::vector<xt::xarray<float>>& dL_dys) override {
+    const xt::xarray<float>& dL_dy = dL_dys[0];
+
     // y = -x ---> dy_dx = -1 ---> dL_dx = dL_dy * dy_dx = dL_dy * (-1) = -dL_dy
-    const xt::xarray<float> dL_dx = -dL_dys[0];
+    const xt::xarray<float> dL_dx = -dL_dy;
 
     return {dL_dx};
   }

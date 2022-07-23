@@ -23,8 +23,10 @@ class Reshape : public core::Function {
   }
 
   const std::vector<xt::xarray<float>> Backward(const std::vector<xt::xarray<float>>& dL_dys) override {
-    xt::xarray<float> dL_dx = dL_dys[0];
+    const xt::xarray<float>& dL_dy = dL_dys[0];
     const xt::xarray<float>::shape_type& x_shape = input_tensor_ptrs_[0]->data().shape();
+
+    xt::xarray<float> dL_dx = dL_dy;
     dL_dx.reshape(x_shape);
 
     return {dL_dx};

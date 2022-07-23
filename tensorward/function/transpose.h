@@ -23,7 +23,9 @@ class Transpose : public core::Function {
   }
 
   const std::vector<xt::xarray<float>> Backward(const std::vector<xt::xarray<float>>& dL_dys) override {
-    const xt::xarray<float> dL_dx = xt::transpose(dL_dys[0]);
+    const xt::xarray<float>& dL_dy = dL_dys[0];
+
+    const xt::xarray<float> dL_dx = xt::transpose(dL_dy);
 
     return {dL_dx};
   }

@@ -26,6 +26,7 @@ class MeanSquaredError : public core::Function {
   }
 
   const std::vector<xt::xarray<float>> Backward(const std::vector<xt::xarray<float>>& dL_dys) override {
+    const xt::xarray<float>& dL_dy = dL_dys[0];
     const xt::xarray<float>& x0 = input_tensor_ptrs_[0]->data();
     const xt::xarray<float>& x1 = input_tensor_ptrs_[1]->data();
 
@@ -41,7 +42,7 @@ class MeanSquaredError : public core::Function {
     //
     //   dL_dx0 = dL_da * da_dx0 = broadcast_to(dL_dy, a_shape) * (2(x0 - x1) / N)
     //
-    const xt::xarray<float> dL_dx0 = xt::broadcast(dL_dys[0], x0.shape()) * (2.0 * (x0 - x1) / num_data);
+    const xt::xarray<float> dL_dx0 = xt::broadcast(dL_dy, x0.shape()) * (2.0 * (x0 - x1) / num_data);
 
     // Suppose we introduce an intermidiate function `b(x1) = (x0 - x1)^2 / N`, then we can re-write `y(x1)` to `y(b)`,
     //

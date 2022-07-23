@@ -23,16 +23,17 @@ class Mul : public Function {
   }
 
   const std::vector<xt::xarray<float>> Backward(const std::vector<xt::xarray<float>>& dL_dys) override {
+    const xt::xarray<float>& dL_dy = dL_dys[0];
     const xt::xarray<float>& x0 = input_tensor_ptrs_[0]->data();
     const xt::xarray<float>& x1 = input_tensor_ptrs_[1]->data();
 
     // y = x0 * x1 ---> dy_dx0 = x1 ---> dL_dx0 = dL_dy * dy_dx0 = dL_dy * x1
     const xt::xarray<float>& dy_dx0 = x1;
-    xt::xarray<float> dL_dx0 = dL_dys[0] * dy_dx0;
+    xt::xarray<float> dL_dx0 = dL_dy * dy_dx0;
 
     // y = x0 * x1 ---> dy_dx1 = x0 ---> dL_dx1 = dL_dy * dy_dx1 = dL_dy * x0
     const xt::xarray<float>& dy_dx1 = x0;
-    xt::xarray<float> dL_dx1 = dL_dys[0] * dy_dx1;
+    xt::xarray<float> dL_dx1 = dL_dy * dy_dx1;
 
     // Reduces the shape of dL_dx0 or dL_dx1 if either x0 or x1 was broadcasted during the forward calculation.
     const xt::xarray<float>::shape_type& x0_shape = x0.shape();
