@@ -61,8 +61,8 @@ TEST_F(DivTest, BackwardTest) {
   // y = x0 / x1 = x1^(-1) * x0 ---> dy_dx0 = x1^(-1)
   const xt::xarray<float> expected_input_grad0 = 1.0 / input_data1_;
 
-  // y = x0 / x1 = x0 * x1^(-1) ---> dy_dx1 = -x0 * x1^(-2)
-  const xt::xarray<float> expected_input_grad1 = -input_data0_ / xt::square(input_data1_);
+  // y = x0 / x1 = x0 * x1^(-1) ---> dy_dx1 = x0 * -x1^(-2)
+  const xt::xarray<float> expected_input_grad1 = input_data0_ / -xt::square(input_data1_);
 
   // Checks that the backward calculation is correct (analytically).
   EXPECT_EQ(actual_input_grads[0], expected_input_grad0);
