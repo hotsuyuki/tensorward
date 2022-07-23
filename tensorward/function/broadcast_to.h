@@ -16,6 +16,8 @@ class BroadcastTo : public core::Function {
   BroadcastTo(const xt::xarray<float>::shape_type& output_shape)
       : core::Function({.num_inputs = 1, .num_outputs = 1}), output_shape_(output_shape) {}
 
+  ~BroadcastTo() {}
+
   const std::vector<xt::xarray<float>> Forward(const std::vector<xt::xarray<float>>& xs) override {
     const xt::xarray<float> y = xt::broadcast(xs[0], output_shape_);
 

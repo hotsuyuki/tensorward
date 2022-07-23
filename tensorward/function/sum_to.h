@@ -16,6 +16,8 @@ class SumTo : public core::Function {
   SumTo(const xt::xarray<float>::shape_type& output_shape)
       : core::Function({.num_inputs = 1, .num_outputs = 1}), output_shape_(output_shape) {}
 
+  ~SumTo() {}
+
   const std::vector<xt::xarray<float>> Forward(const std::vector<xt::xarray<float>>& xs) override {
     const xt::xarray<float> y = util::XtensorSumTo(xs[0], output_shape_);
 

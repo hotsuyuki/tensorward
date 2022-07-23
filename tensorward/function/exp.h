@@ -14,6 +14,8 @@ class Exp : public core::Function {
  public:
   Exp() : core::Function({.num_inputs = 1, .num_outputs = 1}) {}
 
+  ~Exp() {}
+
   const std::vector<xt::xarray<float>> Forward(const std::vector<xt::xarray<float>>& xs) override {
     // y = exp(x)
     const xt::xarray<float> y = xt::exp(xs[0]);

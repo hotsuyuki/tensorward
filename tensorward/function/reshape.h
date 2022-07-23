@@ -15,6 +15,8 @@ class Reshape : public core::Function {
   Reshape(const xt::xarray<float>::shape_type& output_shape)
       : core::Function({.num_inputs = 1, .num_outputs = 1}), output_shape_(output_shape) {}
 
+  ~Reshape() {}
+
   const std::vector<xt::xarray<float>> Forward(const std::vector<xt::xarray<float>>& xs) override {
     xt::xarray<float> y = xs[0];
     y.reshape(output_shape_);

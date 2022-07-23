@@ -14,6 +14,8 @@ class Neg : public Function {
  public:
   Neg() : Function({.num_inputs = 1, .num_outputs = 1}) {}
 
+  ~Neg() {}
+
   const std::vector<xt::xarray<float>> Forward(const std::vector<xt::xarray<float>>& xs) override {
     // y = -x
     const xt::xarray<float> y = -xs[0];

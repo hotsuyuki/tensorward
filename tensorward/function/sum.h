@@ -17,6 +17,8 @@ class Sum : public core::Function {
   Sum(const std::optional<xt::xarray<float>::shape_type>& axes_opt = std::nullopt, const bool does_keep_dims = false)
       : core::Function({.num_inputs = 1, .num_outputs = 1}), axes_opt_(axes_opt), does_keep_dims_(does_keep_dims) {}
 
+  ~Sum() {}
+
   const std::vector<xt::xarray<float>> Forward(const std::vector<xt::xarray<float>>& xs) override {
     // NOTE: Ternary operator like `y = does_keep_dims_ ? xt::sum(x, xt::keep_dims) : xt::sum(x);` doesn't work,
     // NOTE: so we use if-else statement instead. 

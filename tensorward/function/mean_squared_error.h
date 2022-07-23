@@ -15,6 +15,8 @@ class MeanSquaredError : public core::Function {
  public:
   MeanSquaredError() : core::Function({.num_inputs = 2, .num_outputs = 1}) {}
 
+  ~MeanSquaredError() {}
+
   const std::vector<xt::xarray<float>> Forward(const std::vector<xt::xarray<float>>& xs) override {
     assert(xs[0].shape() == xs[1].shape());
     const std::size_t& num_data = xs[0].shape(0);

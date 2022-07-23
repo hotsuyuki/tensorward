@@ -16,6 +16,8 @@ class Transpose : public core::Function {
   // TODO: e.g. `Transpose(const xt::xarray<float>::shape_type& permutation = None) : ..., permutation_(permutation) {}`
   Transpose() : core::Function({.num_inputs = 1, .num_outputs = 1}) {}
 
+  ~Transpose() {}
+
   const std::vector<xt::xarray<float>> Forward(const std::vector<xt::xarray<float>>& xs) override {
     const xt::xarray<float> y = xt::transpose(xs[0]);
 

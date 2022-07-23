@@ -14,6 +14,8 @@ class Sigmoid : public core::Function {
  public:
   Sigmoid() : core::Function({.num_inputs = 1, .num_outputs = 1}) {}
 
+  ~Sigmoid() {}
+
   const std::vector<xt::xarray<float>> Forward(const std::vector<xt::xarray<float>>& xs) override {
     // y = 1 / (1 + exp(-x))
     const xt::xarray<float> y = 1.0 / (1.0 + xt::exp(-xs[0]));

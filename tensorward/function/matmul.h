@@ -15,6 +15,8 @@ class Matmul : public core::Function {
  public:
   Matmul() : core::Function({.num_inputs = 2, .num_outputs = 1}) {}
 
+  ~Matmul() {}
+
   const std::vector<xt::xarray<float>> Forward(const std::vector<xt::xarray<float>>& xs) override {
     const xt::xarray<float>& x = xs[0];
     const xt::xarray<float>& W = xs[1];

@@ -15,6 +15,8 @@ class Mul : public Function {
  public:
   Mul() : Function({.num_inputs = 2, .num_outputs = 1}) {}
 
+  ~Mul() {}
+
   const std::vector<xt::xarray<float>> Forward(const std::vector<xt::xarray<float>>& xs) override {
     // y = x0 * x1
     const xt::xarray<float> y = xs[0] * xs[1];

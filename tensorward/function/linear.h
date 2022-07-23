@@ -16,6 +16,8 @@ class Linear : public core::Function {
  public:
   Linear() : core::Function({.num_inputs = 3, .num_outputs = 1}) {}
 
+  ~Linear() {}
+
   const std::vector<xt::xarray<float>> Forward(const std::vector<xt::xarray<float>>& xs) override {
     const xt::xarray<float>& x = xs[0];
     const xt::xarray<float>& W = xs[1];

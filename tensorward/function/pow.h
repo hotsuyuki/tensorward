@@ -14,6 +14,8 @@ class Pow : public core::Function {
  public:
   Pow(const int exponent) : core::Function({.num_inputs = 1, .num_outputs = 1}), exponent_(exponent) {}
 
+  ~Pow() {}
+
   const std::vector<xt::xarray<float>> Forward(const std::vector<xt::xarray<float>>& xs) override {
     // y = x^e
     const xt::xarray<float> y = xt::pow(xs[0], exponent_);

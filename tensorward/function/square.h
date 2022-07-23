@@ -14,6 +14,8 @@ class Square : public core::Function {
  public:
   Square() : core::Function({.num_inputs = 1, .num_outputs = 1}) {}
 
+  ~Square() {}
+
   const std::vector<xt::xarray<float>> Forward(const std::vector<xt::xarray<float>>& xs) override {
     // y = x^2
     const xt::xarray<float> y = xt::square(xs[0]);
