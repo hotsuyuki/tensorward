@@ -18,8 +18,7 @@ class Tensor {
  public:
   Tensor(const xt::xarray<float>& data, const std::string& name = "") : data_(data), name_(name), generation_(0) {}
 
-  // TODO: Change to a virtual destructor when inheriting.
-  ~Tensor() {}
+  virtual ~Tensor() {}
 
   // Starts the backpropagation from this tensor (the last tensor) until the first tensor in the computational graph.
   void Backpropagation(const bool does_retain_grad = false);
@@ -59,8 +58,7 @@ class Tensor {
 
   const int generation() const { return generation_; }
 
- // TODO: Change to `protected:` when inheriting.
- private:
+ protected:
   xt::xarray<float> data_;
 
   std::optional<xt::xarray<float>> grad_opt_;

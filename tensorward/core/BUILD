@@ -30,6 +30,19 @@ cc_library(
 )
 
 cc_library(
+  name = "parameter",
+  srcs = ["parameter.cc"],
+  hdrs = [
+    "parameter.h",
+  ],
+  deps = [
+    ":tensor",
+    "@xtensor//:xtensor",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+cc_library(
   # Forward declaration in order to avoid circular dependency between `Tensor` class and `Function` class.
   name = "tensor_fwd",
   hdrs = ["tensor_fwd.h"],
@@ -71,6 +84,22 @@ cc_test(
     ":function",
     "//tensorward/core:tensor",
     "//tensorward/core/operator:add",
+    "@com_google_googletest//:gtest_main",
+    "@xtensor//:xtensor",
+  ],
+)
+
+cc_test(
+  name = "parameter_test",
+  srcs = ["test/parameter_test.cc"],
+  deps = [
+    ":parameter",
+    "//tensorward/core:tensor",
+    "//tensorward/core/operator:add",
+    "//tensorward/core/operator:div",
+    "//tensorward/core/operator:mul",
+    "//tensorward/core/operator:sub",
+    "//tensorward/function:mean_squared_error",
     "@com_google_googletest//:gtest_main",
     "@xtensor//:xtensor",
   ],
