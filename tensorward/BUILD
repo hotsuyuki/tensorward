@@ -22,6 +22,7 @@ cc_library(
   deps = [
     "//tensorward/function:broadcast_to",
     "//tensorward/function:exp",
+    "//tensorward/function:linear",
     "//tensorward/function:matmul",
     "//tensorward/function:mean_squared_error",
     "//tensorward/function:pow",

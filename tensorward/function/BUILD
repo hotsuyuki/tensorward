@@ -24,6 +24,19 @@ cc_library(
 )
 
 cc_library(
+  name = "linear",
+  hdrs = ["linear.h"],
+  deps = [
+    "//tensorward/core:function",
+    "//tensorward/core:tensor",
+    "//tensorward/util:xtensor_sum_to",
+    "@xtensor//:xtensor",
+    "@xtensor-blas//:xtensor-blas",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+cc_library(
   name = "matmul",
   hdrs = ["matmul.h"],
   deps = [
@@ -129,6 +142,16 @@ cc_test(
   deps = [
     ":exp",
     "//tensorward/util:numerical_gradient",
+    "@com_google_googletest//:gtest_main",
+    "@xtensor//:xtensor",
+  ],
+)
+
+cc_test(
+  name = "linear_test",
+  srcs = ["test/linear_test.cc"],
+  deps = [
+    ":linear",
     "@com_google_googletest//:gtest_main",
     "@xtensor//:xtensor",
   ],
