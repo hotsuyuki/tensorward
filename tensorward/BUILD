@@ -6,6 +6,7 @@ cc_library(
   deps = [
     "//tensorward/core:config",
     "//tensorward/core:function",
+    "//tensorward/core:parameter",
     "//tensorward/core:tensor",
     "//tensorward/core/operator:add",
     "//tensorward/core/operator:div",
