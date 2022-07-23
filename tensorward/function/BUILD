@@ -82,6 +82,17 @@ cc_library(
 )
 
 cc_library(
+  name = "sigmoid",
+  hdrs = ["sigmoid.h"],
+  deps = [
+    "//tensorward/core:function",
+    "//tensorward/core:tensor",
+    "@xtensor//:xtensor",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+cc_library(
   name = "square",
   hdrs = ["square.h"],
   deps = [
@@ -193,6 +204,17 @@ cc_test(
   srcs = ["test/reshape_test.cc"],
   deps = [
     ":reshape",
+    "@com_google_googletest//:gtest_main",
+    "@xtensor//:xtensor",
+  ],
+)
+
+cc_test(
+  name = "sigmoid_test",
+  srcs = ["test/sigmoid_test.cc"],
+  deps = [
+    ":sigmoid",
+    "//tensorward/util:numerical_gradient",
     "@com_google_googletest//:gtest_main",
     "@xtensor//:xtensor",
   ],

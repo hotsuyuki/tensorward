@@ -8,6 +8,7 @@
 #include "tensorward/function/mean_squared_error.h"
 #include "tensorward/function/pow.h"
 #include "tensorward/function/reshape.h"
+#include "tensorward/function/sigmoid.h"
 #include "tensorward/function/square.h"
 #include "tensorward/function/sum.h"
 #include "tensorward/function/sum_to.h"
