@@ -73,7 +73,7 @@ class Tensor {
 const TensorSharedPtr AsTensorSharedPtr(const xt::xarray<float>& data, const std::string& name = "");
 
 inline std::ostream& operator<<(std::ostream& os, const Tensor& tensor) {
-  !tensor.name().empty() ? (os << std::endl << "Tensor '" << tensor.name() << "'") : (os << std::endl << "Tensor");
+  !tensor.name().empty() ? (os << std::endl << "'" << tensor.name() << "'") : (os << std::endl << "(No name)");
   os << std::endl << "data:" << std::endl << tensor.data();
   if (tensor.grad_opt().has_value()) {
     os << std::endl << "grad:" << std::endl << tensor.grad();
@@ -82,7 +82,7 @@ inline std::ostream& operator<<(std::ostream& os, const Tensor& tensor) {
 }
 
 inline std::ostream& operator<<(std::ostream& os, const TensorSharedPtr tensor_ptr) {
-  tensor_ptr ? (os << *tensor_ptr) : (os << std::endl << "Tensor (Null)");
+  tensor_ptr ? (os << *tensor_ptr) : (os << std::endl << "(Null)");
   return os;
 }
 
