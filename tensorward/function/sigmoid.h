@@ -44,4 +44,11 @@ const core::TensorSharedPtr sigmoid(const core::TensorSharedPtr input_tensor_ptr
   return output_tensor_ptrs[0];
 }
 
+const core::FunctionLambda sigmoid_lambda = [](const std::vector<core::TensorSharedPtr>& input_tensor_ptrs) {
+  const core::TensorSharedPtr output_tensor_ptr = sigmoid(input_tensor_ptrs[0]);
+  const std::vector<core::TensorSharedPtr> output_tensor_ptrs({output_tensor_ptr});
+
+  return output_tensor_ptrs;
+};
+
 }  // namespace tensorward::function
