@@ -6,6 +6,8 @@ cc_library(
   deps = [
     "//tensorward/core:config",
     "//tensorward/core:function",
+    "//tensorward/core:layer",
+    "//tensorward/core:model",
     "//tensorward/core:parameter",
     "//tensorward/core:tensor",
     "//tensorward/core/operator:add",
@@ -33,6 +35,24 @@ cc_library(
     "//tensorward/function:sum",
     "//tensorward/function:sum_to",
     "//tensorward/function:transpose",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+cc_library(
+  name = "layer",
+  hdrs = ["layer.h"],
+  deps = [
+    "//tensorward/layer:linear",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+cc_library(
+  name = "model",
+  hdrs = ["model.h"],
+  deps = [
+    "//tensorward/model:multi_layer_perceptron",
   ],
   visibility = ["//visibility:public"],
 )
