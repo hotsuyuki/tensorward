@@ -6,6 +6,7 @@ cc_binary(
   deps = [
     "//tensorward:core",
     "//tensorward:function",
+    "//tensorward:model",
     "@xtensor//:xtensor",
   ],
 )
