@@ -30,6 +30,33 @@ cc_library(
 )
 
 cc_library(
+  name = "layer",
+  srcs = ["layer.cc"],
+  hdrs = [
+    "layer.h",
+  ],
+  deps = [
+    ":parameter",
+    ":tensor",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+cc_library(
+  name = "model",
+  srcs = ["model.cc"],
+  hdrs = [
+    "model.h",
+  ],
+  deps = [
+    ":layer",
+    ":parameter",
+    ":tensor",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+cc_library(
   name = "parameter",
   srcs = ["parameter.cc"],
   hdrs = [
@@ -84,6 +111,29 @@ cc_test(
     ":function",
     "//tensorward/core:tensor",
     "//tensorward/core/operator:add",
+    "@com_google_googletest//:gtest_main",
+    "@xtensor//:xtensor",
+  ],
+)
+
+cc_test(
+  name = "layer_test",
+  srcs = ["test/layer_test.cc"],
+  deps = [
+    ":layer",
+    "//tensorward/layer:linear",
+    "@com_google_googletest//:gtest_main",
+    "@xtensor//:xtensor",
+  ],
+)
+
+cc_test(
+  name = "model_test",
+  srcs = ["test/model_test.cc"],
+  deps = [
+    ":model",
+    "//tensorward/function:sigmoid",
+    "//tensorward/model:multi_layer_perceptron",
     "@com_google_googletest//:gtest_main",
     "@xtensor//:xtensor",
   ],
