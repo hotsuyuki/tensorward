@@ -25,8 +25,9 @@ class LayerTest : public ::testing::Test {
         linear_layer_ptr_(std::make_shared<layer::Linear>(kOutSize)),
         output_tensor_ptr_(linear_layer_ptr_->Call({input_tensor_ptr_})[0]) {}
 
+  // NOTE: Need to use `shared_ptr<layer::Linear>` instead of `shared_ptr<Layer>` in order to use member functions
+  // NOTE: that are defined only in the derived class, which is `layer::Linear`, e.g. `W_name()` and `b_name()`.
   const TensorSharedPtr input_tensor_ptr_;
-  // NOTE: Need to use `shared_ptr<layer::Linear>` instead of `shared_ptr<Layer>` to use `W_name()` and `b_name()`.
   const std::shared_ptr<layer::Linear> linear_layer_ptr_;
   const TensorSharedPtr output_tensor_ptr_;
 };
