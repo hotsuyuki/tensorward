@@ -36,6 +36,7 @@ TEST_F(LinearTest, ForwardTest) {
     ASSERT_EQ(actual_output_tensor_ptrs.size(), 1);
     const xt::xarray<float>& actual_output_data = actual_output_tensor_ptrs[0]->data();
 
+    // There should exist 2 parameters: weight "W", bias "b".
     ASSERT_EQ(linear_layer_ptr->param_map().size(), 2);
 
     // y = x W + b
@@ -59,6 +60,7 @@ TEST_F(LinearTest, ForwardTest) {
     ASSERT_EQ(actual_output_tensor_ptrs.size(), 1);
     const xt::xarray<float>& actual_output_data = actual_output_tensor_ptrs[0]->data();
 
+    // There should exist 1 parameter: weight "W".
     ASSERT_EQ(linear_layer_ptr->param_map().size(), 1);
 
     // y = x W
