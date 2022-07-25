@@ -16,7 +16,7 @@ class Model {
   virtual ~Model() {}
 
   // Performs the forward calculation of the function of the layers of this model.
-  virtual const std::vector<TensorSharedPtr> Predict(const std::vector<TensorSharedPtr>& input_tensor_ptrs) = 0;
+  virtual const std::vector<TensorSharedPtr> Predict(const std::vector<TensorSharedPtr>& input_tensor_ptrs) const = 0;
 
   void ClearGrads();
 

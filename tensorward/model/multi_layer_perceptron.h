@@ -26,7 +26,7 @@ class MultiLayerPerceptron : public core::Model {
   ~MultiLayerPerceptron() {}
 
   const std::vector<core::TensorSharedPtr> Predict(
-      const std::vector<core::TensorSharedPtr>& input_tensor_ptrs) override {
+      const std::vector<core::TensorSharedPtr>& input_tensor_ptrs) const override {
     std::vector<core::TensorSharedPtr> output_tensor_ptrs(input_tensor_ptrs);
     for (std::size_t i = 0; i < layer_ptrs_.size() - 1; ++i) {
       output_tensor_ptrs = layer_ptrs_[i]->Call(output_tensor_ptrs);
