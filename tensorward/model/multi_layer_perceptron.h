@@ -37,9 +37,9 @@ class MultiLayerPerceptron : public core::Model {
     return output_tensor_ptrs;
   }
 
-  const std::vector<std::size_t>& out_sizes() { return out_sizes_; }
+  const std::vector<std::size_t>& out_sizes() const { return out_sizes_; }
 
-  const core::FunctionLambda& activation_function_lambda() { return activation_function_lambda_; }
+  const core::FunctionLambda& activation_function_lambda() const { return activation_function_lambda_; }
 
  private:
   std::vector<std::size_t> out_sizes_;
