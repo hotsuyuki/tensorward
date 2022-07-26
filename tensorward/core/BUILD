@@ -57,6 +57,19 @@ cc_library(
 )
 
 cc_library(
+  name = "optimizer",
+  srcs = ["optimizer.cc"],
+  hdrs = [
+    "optimizer.h",
+  ],
+  deps = [
+    ":function",
+    ":parameter",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+cc_library(
   name = "parameter",
   srcs = ["parameter.cc"],
   hdrs = [
@@ -134,6 +147,17 @@ cc_test(
     ":model",
     "//tensorward/function:sigmoid",
     "//tensorward/model:multi_layer_perceptron",
+    "@com_google_googletest//:gtest_main",
+    "@xtensor//:xtensor",
+  ],
+)
+
+cc_test(
+  name = "optimizer_test",
+  srcs = ["test/optimizer_test.cc"],
+  deps = [
+    ":optimizer",
+    "//tensorward/optimizer:stochastic_gradient_descent",
     "@com_google_googletest//:gtest_main",
     "@xtensor//:xtensor",
   ],
