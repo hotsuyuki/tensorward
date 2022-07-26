@@ -39,7 +39,7 @@ int main(int argc, char* argv[]) {
   M::MultiLayerPerceptron model({kHiddenSize, kOutSize}, F::sigmoid_lambda);
 
   // Optimizer
-  const O::StochasticGradientDescent optimizer(kLearningRate);
+  O::StochasticGradientDescent optimizer(kLearningRate);
 
   for (std::size_t i = 0; i < kIterations; ++i) {
     // Prediction

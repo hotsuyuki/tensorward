@@ -13,9 +13,9 @@ class Optimizer {
 
   virtual ~Optimizer() {}
 
-  void Update(const std::vector<ParameterSharedPtr>& param_ptrs) const;
+  void Update(const std::vector<ParameterSharedPtr>& param_ptrs);
 
-  virtual void UpdateSingleParameter(const ParameterSharedPtr param_ptr) const = 0;
+  virtual void UpdateSingleParameter(const ParameterSharedPtr param_ptr) = 0;
 
  protected:
   // TODO: Add something like `preprocess_function_lambdas_`.

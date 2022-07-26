@@ -27,7 +27,7 @@ class OptimizerTest : public ::testing::Test {
   const ParameterSharedPtr W_ptr_;
   const ParameterSharedPtr b_ptr_;
   const std::vector<ParameterSharedPtr> parameter_ptrs_;
-  const optimizer::StochasticGradientDescent stochastic_gradient_descent_optimizer_;
+  optimizer::StochasticGradientDescent stochastic_gradient_descent_optimizer_;
 };
 
 TEST_F(OptimizerTest, UpdateTest) {

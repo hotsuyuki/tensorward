@@ -21,7 +21,7 @@ class StochasticGradientDescentTest : public ::testing::Test {
         stochastic_gradient_descent_optimizer_(kLearningRate) {}
 
   const core::ParameterSharedPtr parameter_ptr_;
-  const optimizer::StochasticGradientDescent stochastic_gradient_descent_optimizer_;
+  StochasticGradientDescent stochastic_gradient_descent_optimizer_;
 };
 
 TEST_F(StochasticGradientDescentTest, UpdateSingleParameterTest) {

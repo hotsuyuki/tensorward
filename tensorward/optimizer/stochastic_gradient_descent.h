@@ -11,7 +11,8 @@ class StochasticGradientDescent : public core::Optimizer {
 
   ~StochasticGradientDescent() {}
 
-  void UpdateSingleParameter(const core::ParameterSharedPtr param_ptr) const override {
+  void UpdateSingleParameter(const core::ParameterSharedPtr param_ptr) override {
+    // p <--- p - lr * dL_dp
     param_ptr->SeData(param_ptr->data() - learning_rate_ * param_ptr->grad());
   }
 
