@@ -7,6 +7,7 @@ cc_binary(
     "//tensorward:core",
     "//tensorward:function",
     "//tensorward:model",
+    "//tensorward:optimizer",
     "@xtensor//:xtensor",
   ],
 )

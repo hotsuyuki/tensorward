@@ -8,12 +8,14 @@
 #include "tensorward/core.h"
 #include "tensorward/function.h"
 #include "tensorward/model.h"
+#include "tensorward/optimizer.h"
 
 #define DEBUG_PRINT(var) std::cout << #var << " = " << var << std::endl;
 
 namespace tw = tensorward::core;
 namespace F = tensorward::function;
 namespace M = tensorward::model;
+namespace O = tensorward::optimizer;
 
 int main(int argc, char* argv[]) {
   constexpr int kDataSize = 100;
@@ -34,23 +36,24 @@ int main(int argc, char* argv[]) {
   const tw::TensorSharedPtr y_ptr = tw::AsTensorSharedPtr(y_data, "y");
 
   // Model
-  M::MultiLayerPerceptron multi_layer_perceptron_model({kHiddenSize, kOutSize}, F::sigmoid_lambda);
+  M::MultiLayerPerceptron model({kHiddenSize, kOutSize}, F::sigmoid_lambda);
+
+  // Optimizer
+  const O::StochasticGradientDescent optimizer(kLearningRate);
 
   for (std::size_t i = 0; i < kIterations; ++i) {
     // Prediction
-    const tw::TensorSharedPtr y_pred_ptr = multi_layer_perceptron_model.Predict({x_ptr})[0];
+    const tw::TensorSharedPtr y_pred_ptr = model.Predict({x_ptr})[0];
 
     // Loss
     const tw::TensorSharedPtr loss_ptr = F::mean_squared_error(y_ptr, y_pred_ptr);
 
     // Backpropagation
-    multi_layer_perceptron_model.ClearGrads();
+    model.ClearGrads();
     loss_ptr->Backpropagation();
 
     // Parameter update
-    for (const auto& param_ptr : multi_layer_perceptron_model.GetParamPtrs()) {
-      param_ptr->SeData(param_ptr->data() - kLearningRate * param_ptr->grad());
-    }
+    optimizer.Update(model.GetParamPtrs());
 
     if (i % (kIterations / 10) == 0) {
       DEBUG_PRINT(i);
@@ -61,7 +64,7 @@ int main(int argc, char* argv[]) {
 
   std::cout << "------------------------------------" << std::endl << std::endl;
 
-  for (const auto& param_ptr : multi_layer_perceptron_model.GetParamPtrs()) {
+  for (const auto& param_ptr : model.GetParamPtrs()) {
     DEBUG_PRINT(param_ptr);
     std::cout << std::endl;
   }
@@ -80,7 +83,7 @@ int main(int argc, char* argv[]) {
   std::cout << "]" << std::endl;
   std::cout << std::endl;
 
-  const tw::TensorSharedPtr y_pred_ptr = multi_layer_perceptron_model.Predict({x_ptr})[0];
+  const tw::TensorSharedPtr y_pred_ptr = model.Predict({x_ptr})[0];
   std::cout << "ys_pred = [";
   for (const auto& y_pred : y_pred_ptr->data()) {
     std::cout << y_pred << ", ";
