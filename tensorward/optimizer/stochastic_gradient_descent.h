@@ -21,4 +21,4 @@ class StochasticGradientDescent : public core::Optimizer {
   float learning_rate_;
 };
 
-}  // tensorward::optimizer
+}  // namespace tensorward::optimizer
