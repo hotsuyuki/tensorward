@@ -36,7 +36,7 @@ int main(int argc, char* argv[]) {
   const tw::TensorSharedPtr y_ptr = tw::AsTensorSharedPtr(y_data, "y");
 
   // Model
-  M::MultiLayerPerceptron model({kHiddenSize, kOutSize}, F::sigmoid_lambda);
+  M::MultiLayerPerceptron model({kHiddenSize, kOutSize}, tw::AsFunctionSharedPtr<F::Sigmoid>());
 
   // Optimizer
   O::StochasticGradientDescent optimizer(kLearningRate);

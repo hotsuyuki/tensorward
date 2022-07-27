@@ -22,7 +22,8 @@ class ModelTest : public ::testing::Test {
  protected:
   ModelTest()
       : input_tensor_ptr_(AsTensorSharedPtr(xt::random::rand<float>({kDataSize, kInSize}))),
-        multi_layer_perceptron_model_(model::MultiLayerPerceptron({kHiddenSize, kOutSize}, function::sigmoid_lambda)),
+        multi_layer_perceptron_model_(
+            model::MultiLayerPerceptron({kHiddenSize, kOutSize}, core::AsFunctionSharedPtr<function::Sigmoid>())),
         output_tensor_ptr_(multi_layer_perceptron_model_.Predict({input_tensor_ptr_})[0]) {}
 
   const TensorSharedPtr input_tensor_ptr_;

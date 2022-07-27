@@ -28,7 +28,8 @@ class MultiLayerPerceptronTest : public ::testing::Test {
 
 TEST_F(MultiLayerPerceptronTest, PredictTest) {
   // y = linear(sigmoid(linear(x)))
-  MultiLayerPerceptron multi_layer_perceptron_model({kHiddenSize, kOutSize}, function::sigmoid_lambda);
+  MultiLayerPerceptron multi_layer_perceptron_model({kHiddenSize, kOutSize},
+                                                    core::AsFunctionSharedPtr<function::Sigmoid>());
 
   const std::vector<core::TensorSharedPtr> actual_input_tensor_ptrs({input_tensor_ptr_});
   const std::vector<core::TensorSharedPtr> actual_output_tensor_ptrs =

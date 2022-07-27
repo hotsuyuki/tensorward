@@ -1,6 +1,5 @@
 #pragma once
 
-#include <functional>
 #include <memory>
 #include <vector>
 
@@ -62,6 +61,10 @@ class Function : public std::enable_shared_from_this<Function> {
   int generation_;
 };
 
-using FunctionLambda = std::function<std::vector<TensorSharedPtr>(const std::vector<TensorSharedPtr>&)>;
+// NOTE: Because this function is templated, the function definition should be in the header file.
+template <class FunctionT>
+const FunctionSharedPtr AsFunctionSharedPtr() {
+  return std::make_shared<FunctionT>();
+}
 
 }  // namespace tensorward::core

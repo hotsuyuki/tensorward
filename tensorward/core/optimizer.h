@@ -18,7 +18,7 @@ class Optimizer {
   virtual void UpdateSingleParameter(const ParameterSharedPtr param_ptr) = 0;
 
  protected:
-  // TODO: Add something like `preprocess_function_lambdas_`.
+  // TODO: Add something like `preprocess_functions_`.
 };
   
 }  // namespace tensorward::core
