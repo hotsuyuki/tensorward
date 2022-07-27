@@ -61,13 +61,13 @@ TEST_F(SumTest, BackwardWithAxesButWithoutKeepDimsFlagTest) {
   const core::FunctionSharedPtr sum_function_ptr = std::make_shared<Sum>(axes, does_keep_dims);
 
   // clang-format off
-  const xt::xarray<float> input_data({{11, 12, 13},
-                                      {21, 22, 23}});
+  const xt::xarray<float> input_data({{11.0, 12.0, 13.0},
+                                      {21.0, 22.0, 23.0}});
   // clang-format on
 
   // NOTE: The shape of the expected output data is {2} with 1 dimension, not {2, 1} with 2 dimensions,
   // NOTE: because of "with axes but without keep dims flag".
-  const xt::xarray<float> expected_output_data({36, 66});
+  const xt::xarray<float> expected_output_data({36.0, 66.0});
 
   // NOTE: Need to use `Call()` instead of `Forward()` in order to create the computational graph for `Backward()`.
   const std::vector<core::TensorSharedPtr> actual_input_tensors({core::AsTensorSharedPtr(input_data)});

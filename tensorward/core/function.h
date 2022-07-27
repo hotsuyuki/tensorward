@@ -62,9 +62,9 @@ class Function : public std::enable_shared_from_this<Function> {
 };
 
 // NOTE: Because this function is templated, the function definition should be in the header file.
-template <class FunctionT>
+template <class T>
 const FunctionSharedPtr AsFunctionSharedPtr() {
-  return std::make_shared<FunctionT>();
+  return std::make_shared<T>();
 }
 
 }  // namespace tensorward::core
