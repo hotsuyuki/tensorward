@@ -61,6 +61,7 @@ cc_library(
   name = "optimizer",
   hdrs = ["optimizer.h"],
   deps = [
+    "//tensorward/optimizer:momentum_stochastic_gradient_descent",
     "//tensorward/optimizer:stochastic_gradient_descent",
   ],
   visibility = ["//visibility:public"],
