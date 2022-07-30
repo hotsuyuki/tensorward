@@ -44,7 +44,7 @@ TEST_F(ModelTest, ClearGradsTest) {
 
   // Checks that parameter tensors don't have (but input tensors still have) their gradient after gradient clearing.
   for (const auto& param_ptr : multi_layer_perceptron_model_.GetParamPtrs()) {
-    EXPECT_FALSE(param_ptr->grad_opt().has_value());
+    EXPECT_TRUE(!param_ptr->grad_opt().has_value());
   }
   EXPECT_TRUE(input_tensor_ptr_->grad_opt().has_value());
 }
@@ -56,7 +56,7 @@ TEST_F(ModelTest, GetParamPtrsTest) {
   const std::vector<ParameterSharedPtr>& param_ptrs = multi_layer_perceptron_model_.GetParamPtrs();
 
   // Makes sure that the member variable `param_ptrs_` is not empty after calling `GetParamPtrs()`.
-  ASSERT_FALSE(multi_layer_perceptron_model_.param_ptrs().empty());
+  ASSERT_TRUE(!multi_layer_perceptron_model_.param_ptrs().empty());
 
   // There should exist 4 parameters:
   //   * from layer0 ... weight "W0", bias "b0"
