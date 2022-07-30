@@ -3,6 +3,7 @@
 // Header file aggregation for users.
 #include "tensorward/function/broadcast_to.h"
 #include "tensorward/function/exp.h"
+#include "tensorward/function/get_item.h"
 #include "tensorward/function/linear.h"
 #include "tensorward/function/matmul.h"
 #include "tensorward/function/mean_squared_error.h"

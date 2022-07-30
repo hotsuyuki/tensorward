@@ -24,6 +24,17 @@ cc_library(
 )
 
 cc_library(
+  name = "get_item",
+  hdrs = ["get_item.h"],
+  deps = [
+    "//tensorward/core:function",
+    "//tensorward/core:tensor",
+    "@xtensor//:xtensor",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+cc_library(
   name = "linear",
   hdrs = ["linear.h"],
   deps = [
@@ -153,6 +164,16 @@ cc_test(
   deps = [
     ":exp",
     "//tensorward/util:numerical_gradient",
+    "@com_google_googletest//:gtest_main",
+    "@xtensor//:xtensor",
+  ],
+)
+
+cc_test(
+  name = "get_item_test",
+  srcs = ["test/get_item_test.cc"],
+  deps = [
+    ":get_item",
     "@com_google_googletest//:gtest_main",
     "@xtensor//:xtensor",
   ],
