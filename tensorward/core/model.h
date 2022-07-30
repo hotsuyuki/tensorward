@@ -20,14 +20,18 @@ class Model {
 
   void ClearGrads();
 
-  const std::vector<ParameterSharedPtr> GetParamPtrs() const;
+  const std::vector<ParameterSharedPtr>& GetParamPtrs();
 
   // TODO: Implement `Plot()` that plots the computational graph of this model using Graphviz DOT language.
 
   const std::vector<LayerSharedPtr>& layer_ptrs() const { return layer_ptrs_; }
 
+  const std::vector<ParameterSharedPtr>& param_ptrs() const { return param_ptrs_; }
+
  protected:
   std::vector<LayerSharedPtr> layer_ptrs_;
+
+  std::vector<ParameterSharedPtr> param_ptrs_;
 };
 
 }  // namespace tensorward::core

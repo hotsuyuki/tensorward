@@ -8,22 +8,25 @@ void Model::ClearGrads() {
   }
 }
 
-const std::vector<ParameterSharedPtr> Model::GetParamPtrs() const {
-  std::size_t num_param_ptrs = 0;
-  for (const auto& layer_ptr : layer_ptrs_) {
-    num_param_ptrs += layer_ptr->param_map().size();
-  }
+const std::vector<ParameterSharedPtr>& Model::GetParamPtrs() {
+  if (param_ptrs_.empty()) {
+    std::size_t num_param_ptrs = 0;
+    for (const auto& layer_ptr : layer_ptrs_) {
+      num_param_ptrs += layer_ptr->param_map().size();
+    }
 
-  std::vector<ParameterSharedPtr> param_ptrs;
-  param_ptrs.reserve(num_param_ptrs);
-  for (const auto& layer_ptr : layer_ptrs_) {
-    for (const auto& param_name_ptr : layer_ptr->param_map()) {
-      const ParameterSharedPtr param_ptr = param_name_ptr.second;
-      param_ptrs.push_back(param_ptr);
+    param_ptrs_.clear();
+    param_ptrs_.reserve(num_param_ptrs);
+
+    for (const auto& layer_ptr : layer_ptrs_) {
+      for (const auto& param_name_ptr : layer_ptr->param_map()) {
+        const ParameterSharedPtr param_ptr = param_name_ptr.second;
+        param_ptrs_.push_back(param_ptr);
+      }
     }
   }
 
-  return param_ptrs;
+  return param_ptrs_;
 }
 
 }  // namespace tensorward::core
