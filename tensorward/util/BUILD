@@ -11,6 +11,15 @@ cc_library(
 )
 
 cc_library(
+  name = "xtensor_cross_entropy_error",
+  hdrs = ["xtensor_cross_entropy_error.h"],
+  deps = [
+    "@xtensor//:xtensor",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+cc_library(
   name = "xtensor_softmax",
   hdrs = ["xtensor_softmax.h"],
   deps = [
@@ -36,6 +45,16 @@ cc_test(
     "//tensorward/function:exp",
     "//tensorward/function:pow",
     "//tensorward/function:square",
+    "@com_google_googletest//:gtest_main",
+    "@xtensor//:xtensor",
+  ],
+)
+
+cc_test(
+  name = "xtensor_cross_entropy_error_test",
+  srcs = ["test/xtensor_cross_entropy_error_test.cc"],
+  deps = [
+    ":xtensor_cross_entropy_error",
     "@com_google_googletest//:gtest_main",
     "@xtensor//:xtensor",
   ],
