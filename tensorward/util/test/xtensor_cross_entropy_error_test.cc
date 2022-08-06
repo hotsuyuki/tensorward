@@ -26,18 +26,14 @@ class XtensorCrossEntropyErrorTest : public ::testing::Test {
   const xt::xarray<float> expected_output_data_;
 };
 
-TEST_F(XtensorCrossEntropyErrorTest, CrossEntropyErrorWithOnehotLabelTest) {
-  const xt::xarray<float> actual_output_data = XtensorCrossEntropyError(input_data0_, input_data1_onehot_);
+TEST_F(XtensorCrossEntropyErrorTest, CrossEntropyErrorTest) {
+  // Tests with both onehot label and non-onehot label.
+  for (const auto& input_data1 : {input_data1_onehot_, input_data1_non_onehot_}) {
+    const xt::xarray<float> actual_output_data = XtensorCrossEntropyError(input_data0_, input_data1);
 
-  // Checks that the calculation is correct.
-  EXPECT_EQ(actual_output_data, expected_output_data_);
-}
-
-TEST_F(XtensorCrossEntropyErrorTest, CrossEntropyErrorWithNonOnehotLabelTest) {
-  const xt::xarray<float> actual_output_data = XtensorCrossEntropyError(input_data0_, input_data1_non_onehot_);
-
-  // Checks that the calculation is correct.
-  EXPECT_EQ(actual_output_data, expected_output_data_);
+    // Checks that the calculation is correct.
+    EXPECT_EQ(actual_output_data, expected_output_data_);
+  }
 }
 
 }  // namespace tensorward::util
