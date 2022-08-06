@@ -32,6 +32,7 @@ cc_library(
     "//tensorward/function:pow",
     "//tensorward/function:reshape",
     "//tensorward/function:sigmoid",
+    "//tensorward/function:softmax_cross_entropy_error",
     "//tensorward/function:square",
     "//tensorward/function:sum",
     "//tensorward/function:sum_to",

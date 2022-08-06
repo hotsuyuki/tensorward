@@ -104,6 +104,19 @@ cc_library(
 )
 
 cc_library(
+  name = "softmax_cross_entropy_error",
+  hdrs = ["softmax_cross_entropy_error.h"],
+  deps = [
+    "//tensorward/core:function",
+    "//tensorward/core:tensor",
+    "//tensorward/util:xtensor_cross_entropy_error",
+    "//tensorward/util:xtensor_softmax",
+    "@xtensor//:xtensor",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+cc_library(
   name = "square",
   hdrs = ["square.h"],
   deps = [
@@ -236,6 +249,16 @@ cc_test(
   deps = [
     ":sigmoid",
     "//tensorward/util:numerical_gradient",
+    "@com_google_googletest//:gtest_main",
+    "@xtensor//:xtensor",
+  ],
+)
+
+cc_test(
+  name = "softmax_cross_entropy_error_test",
+  srcs = ["test/softmax_cross_entropy_error_test.cc"],
+  deps = [
+    ":softmax_cross_entropy_error",
     "@com_google_googletest//:gtest_main",
     "@xtensor//:xtensor",
   ],
