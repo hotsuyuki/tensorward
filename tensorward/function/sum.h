@@ -67,7 +67,7 @@ class Sum : public core::Function {
       // e.g. {-1, 0} ---> {0, 2} ... suppose that the input dimension is 3.
       std::list<int> ascending_axes;
       for (const auto& axis : axes_opt_.value()) {
-        ascending_axes.push_back(0 <= axis ? axis : axis + x_dimension);
+        ascending_axes.push_back((0 <= axis) ? axis : axis + x_dimension);
       }
       ascending_axes.sort();
       

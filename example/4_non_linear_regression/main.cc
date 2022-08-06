@@ -46,7 +46,7 @@ int main(int argc, char* argv[]) {
     const tw::TensorSharedPtr y_pred_ptr = model.Predict({x_ptr})[0];
 
     // Loss
-    const tw::TensorSharedPtr loss_ptr = F::mean_squared_error(y_ptr, y_pred_ptr);
+    const tw::TensorSharedPtr loss_ptr = F::mean_squared_error(y_pred_ptr, y_ptr);
 
     // Backpropagation
     model.ClearGrads();
