@@ -84,6 +84,7 @@ cc_library(
   name = "util",
   hdrs = ["util.h"],
   deps = [
+    "//tensorward/util:accuracy",
     "//tensorward/util:numerical_gradient",
     "//tensorward/util:xtensor_cross_entropy_error",
     "//tensorward/util:xtensor_softmax",

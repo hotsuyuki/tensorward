@@ -69,8 +69,8 @@ const xt::xarray<float> XtensorCrossEntropyError(const xt::xarray<float>& input_
   }
 
   xt::xarray<float> t_log_p;
-  const bool is_t_onehot = (p.shape() == t.shape());
-  if (is_t_onehot) {
+  const bool is_onehot_label = (p.shape() == t.shape());
+  if (is_onehot_label) {
     t_log_p = t * xt::log(p);
   } else {
     // Converts a non-onehot label to indices to extract the corresponding probability.

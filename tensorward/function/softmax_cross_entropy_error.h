@@ -44,8 +44,8 @@ class SoftmaxCrossEntropyError : public core::Function {
 
     // y = cross_entropy_error(softmax(x), t) = cross_entropy_error(p, t) ---> dy_dx = (p - t) / N
     xt::xarray<float> dy_dx;
-    const bool is_t_onehot = (p.shape() == t.shape());
-    if (is_t_onehot) {
+    const bool is_onehot_label = (p.shape() == t.shape());
+    if (is_onehot_label) {
       dy_dx = (p - t) / num_data;
     } else {
       // Converts a non-onehot label to indices to extract the corresponding probability.

@@ -1,6 +1,15 @@
 load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
 
 cc_library(
+  name = "accuracy",
+  hdrs = ["accuracy.h"],
+  deps = [
+    "@xtensor//:xtensor",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+cc_library(
   name = "numerical_gradient",
   hdrs = ["numerical_gradient.h"],
   deps = [
@@ -35,6 +44,16 @@ cc_library(
     "@xtensor//:xtensor",
   ],
   visibility = ["//visibility:public"],
+)
+
+cc_test(
+  name = "accuracy_test",
+  srcs = ["test/accuracy_test.cc"],
+  deps = [
+    ":accuracy",
+    "@com_google_googletest//:gtest_main",
+    "@xtensor//:xtensor",
+  ],
 )
 
 cc_test(
