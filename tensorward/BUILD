@@ -5,6 +5,7 @@ cc_library(
   hdrs = ["core.h"],
   deps = [
     "//tensorward/core:config",
+    "//tensorward/core:dataset",
     "//tensorward/core:function",
     "//tensorward/core:layer",
     "//tensorward/core:model",
@@ -15,6 +16,15 @@ cc_library(
     "//tensorward/core/operator:mul",
     "//tensorward/core/operator:neg",
     "//tensorward/core/operator:sub",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+cc_library(
+  name = "dataset",
+  hdrs = ["dataset.h"],
+  deps = [
+    "//tensorward/dataset:spiral",
   ],
   visibility = ["//visibility:public"],
 )

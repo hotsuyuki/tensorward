@@ -2,6 +2,7 @@
 
 // Header file aggregation for users.
 #include "tensorward/core/config.h"
+#include "tensorward/core/dataset.h"
 #include "tensorward/core/function.h"
 #include "tensorward/core/layer.h"
 #include "tensorward/core/model.h"
