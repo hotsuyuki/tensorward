@@ -51,7 +51,7 @@ TEST_F(ParameterTest, TypeidTest) {
   EXPECT_EQ(typeid(mse_tensor_parameter_obj), typeid(Tensor));
 }
 
-TEST_F(ParameterTest, AsTensorSharedPtrTest) {
+TEST_F(ParameterTest, AsParameterSharedPtr) {
   const xt::xarray<float> array_data = xt::random::rand<float>({kHeight, kWidth});
   const std::string foo_name = "foo";
   const ParameterSharedPtr foo_parameter_ptr = AsParameterSharedPtr(array_data, foo_name);
