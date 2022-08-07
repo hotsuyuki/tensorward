@@ -23,7 +23,7 @@ class Spiral : public core::Dataset {
   ~Spiral() {}
 
   void Prepare() override {
-    const int seed = is_training_mode_ ? 1984 : 2020;
+    const int seed = is_training_mode_ ? 1970 : 2000;
     xt::random::seed(seed);
 
     xt::xarray<float> data = xt::zeros<float>({data_size_, in_size_});
@@ -48,10 +48,10 @@ class Spiral : public core::Dataset {
     label_ = xt::zeros<float>({data_size_});  // non-onehot label
 
     // Shuffles the data and label.
-    const xt::xarray<std::size_t> shuffled_index = xt::random::permutation(data_size_);
+    const xt::xarray<std::size_t> shuffled_indices = xt::random::permutation(data_size_);
     for (std::size_t i = 0; i < data_size_; ++i) {
-      xt::view(data_, i) = xt::view(data, shuffled_index(i));
-      xt::view(label_, i) = xt::view(label, shuffled_index(i));
+      xt::view(data_, i) = xt::view(data, shuffled_indices(i));
+      xt::view(label_, i) = xt::view(label, shuffled_indices(i));
     }
   }
 

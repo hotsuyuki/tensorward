@@ -6,6 +6,7 @@ cc_library(
   deps = [
     "//tensorward/core:config",
     "//tensorward/core:dataset",
+    "//tensorward/core:data_loader",
     "//tensorward/core:function",
     "//tensorward/core:layer",
     "//tensorward/core:model",

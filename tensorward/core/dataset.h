@@ -59,4 +59,14 @@ class Dataset {
   xt::xarray<float> label_;
 };
 
+using DatasetSharedPtr = std::shared_ptr<Dataset>;
+
+// NOTE: Because this function is templated, the function definition should be in the header file.
+template <class T>
+const DatasetSharedPtr AsDatasetSharedPtr(const bool is_training_mode,
+                                          const std::vector<TransformLambda>& data_transform_lambdas = {},
+                                          const std::vector<TransformLambda>& label_transform_lambdas = {}) {
+  return std::make_shared<T>(is_training_mode, data_transform_lambdas, label_transform_lambdas);
+}
+
 }  // namespace tensorward::core

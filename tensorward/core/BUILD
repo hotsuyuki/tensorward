@@ -19,6 +19,19 @@ cc_library(
 )
 
 cc_library(
+  name = "data_loader",
+  srcs = ["data_loader.cc"],
+  hdrs = [
+    "data_loader.h",
+  ],
+  deps = [
+    ":dataset",
+    "@xtensor//:xtensor",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+cc_library(
   # Forward declaration in order to avoid circular dependency between `Tensor` class and `Function` class.
   name = "function_fwd",
   hdrs = ["function_fwd.h"],
@@ -134,6 +147,17 @@ cc_test(
   srcs = ["test/dataset_test.cc"],
   deps = [
     ":dataset",
+    "//tensorward/dataset:spiral",
+    "@com_google_googletest//:gtest_main",
+    "@xtensor//:xtensor",
+  ],
+)
+
+cc_test(
+  name = "data_loader_test",
+  srcs = ["test/data_loader_test.cc"],
+  deps = [
+    ":data_loader",
     "//tensorward/dataset:spiral",
     "@com_google_googletest//:gtest_main",
     "@xtensor//:xtensor",
