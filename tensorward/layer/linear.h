@@ -17,7 +17,8 @@ namespace tensorward::layer {
 
 class Linear : public core::Layer {
  public:
-  Linear(const std::size_t out_size, const bool does_use_bias = true) : out_size_(out_size), does_use_bias_(does_use_bias) {}
+  Linear(const std::size_t out_size, const bool does_use_bias = true)
+      : out_size_(out_size), does_use_bias_(does_use_bias) {}
 
   ~Linear() {}
 
@@ -28,8 +29,9 @@ class Linear : public core::Layer {
     if (param_map_.count(W_name_) == 0) {
       // Initializes the weight "W".
       const std::size_t in_size = x_ptr->data().shape(1);
+      const float scale = std::sqrt(1.0 / in_size);  // Xavier initialization.
       const core::ParameterSharedPtr W_ptr =
-          core::AsParameterSharedPtr(std::sqrt(1.0 / in_size) * xt::random::rand<float>({in_size, out_size_}), W_name_);
+          core::AsParameterSharedPtr(scale * xt::random::randn<float>({in_size, out_size_}), W_name_);
       param_map_[W_name_] = W_ptr;
     }
 
