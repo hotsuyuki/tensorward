@@ -17,12 +17,12 @@ class Spiral : public core::Dataset {
         class_size_(3),
         data_size_for_each_class_(100),
         data_size_(class_size_ * data_size_for_each_class_) {
-    Prepare();
+    Init();
   }
 
   ~Spiral() {}
 
-  void Prepare() override {
+  void Init() override {
     const int seed = is_training_mode_ ? 1970 : 2000;
     xt::random::seed(seed);
 

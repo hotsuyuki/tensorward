@@ -22,7 +22,7 @@ class Dataset {
   virtual ~Dataset() {}
 
   // This member function is pure virtual, so we need to override this in the derived class.
-  virtual void Prepare() = 0;
+  virtual void Init() = 0;
 
   // This member function is not pure virtual, and this has an implementation for the most basic case where
   // `data_` and `label_` store the entire dataset, which means the dataset is small enough to store.
