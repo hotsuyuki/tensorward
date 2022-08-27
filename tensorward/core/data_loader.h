@@ -16,12 +16,12 @@ class DataLoader {
         batch_size_(batch_size),
         max_iteration_(std::ceil(static_cast<float>(dataset_ptr_->size()) / static_cast<float>(batch_size))),
         does_shuffle_dataset_(does_shuffle_dataset) {
-    Reset();
+    Init();
   }
 
   ~DataLoader() {}
 
-  void Reset();
+  void Init();
 
   const std::pair<xt::xarray<float>, xt::xarray<float>> GetBatchAt(const std::size_t i);
 

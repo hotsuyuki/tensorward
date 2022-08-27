@@ -29,12 +29,12 @@ class DatasetTest : public ::testing::Test {
 TEST_F(DatasetTest, ResetTest) {
   const xt::xarray<std::size_t> non_shuffled_indices = xt::arange(spiral_dataset_ptr_->size());
 
-  // Checks that the indicies in the data loader (with shuffle) are shuffled after `Reset()`.
-  spiral_data_loader_with_shuffle_.Reset();
+  // Checks that the indicies in the data loader (with shuffle) are shuffled after `Init()`.
+  spiral_data_loader_with_shuffle_.Init();
   EXPECT_NE(spiral_data_loader_with_shuffle_.indices(), non_shuffled_indices);
 
-  // Checks that the indicies in the data loader (without shuffle) are not shuffled after `Reset()`.
-  spiral_data_loader_without_shuffle_.Reset();
+  // Checks that the indicies in the data loader (without shuffle) are not shuffled after `Init()`.
+  spiral_data_loader_without_shuffle_.Init();
   EXPECT_EQ(spiral_data_loader_without_shuffle_.indices(), non_shuffled_indices);
 }
 
