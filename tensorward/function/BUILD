@@ -82,6 +82,17 @@ cc_library(
 )
 
 cc_library(
+  name = "relu",
+  hdrs = ["relu.h"],
+  deps = [
+    "//tensorward/core:function",
+    "//tensorward/core:tensor",
+    "@xtensor//:xtensor",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+cc_library(
   name = "reshape",
   hdrs = ["reshape.h"],
   deps = [
@@ -128,7 +139,7 @@ cc_library(
 )
 
 cc_library(
-  name = "sum",
+  name = "sum",  # TODO: Change the order from "sum, sum-to" to "sum-to, sum" (alphabetically)
   hdrs = ["sum.h"],
   deps = [
     "//tensorward/core:function",
@@ -228,6 +239,16 @@ cc_test(
   deps = [
     ":pow",
     "//tensorward/util:numerical_gradient",
+    "@com_google_googletest//:gtest_main",
+    "@xtensor//:xtensor",
+  ],
+)
+
+cc_test(
+  name = "relu_test",
+  srcs = ["test/relu_test.cc"],
+  deps = [
+    ":relu",
     "@com_google_googletest//:gtest_main",
     "@xtensor//:xtensor",
   ],

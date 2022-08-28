@@ -43,11 +43,12 @@ cc_library(
     "//tensorward/function:matmul",
     "//tensorward/function:mean_squared_error",
     "//tensorward/function:pow",
+    "//tensorward/function:relu",
     "//tensorward/function:reshape",
     "//tensorward/function:sigmoid",
     "//tensorward/function:softmax_cross_entropy_error",
     "//tensorward/function:square",
-    "//tensorward/function:sum",
+    "//tensorward/function:sum",  # TODO: Change the order from "sum, sum-to" to "sum-to, sum" (alphabetically)
     "//tensorward/function:sum_to",
     "//tensorward/function:transpose",
   ],

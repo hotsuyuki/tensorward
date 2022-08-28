@@ -8,10 +8,11 @@
 #include "tensorward/function/matmul.h"
 #include "tensorward/function/mean_squared_error.h"
 #include "tensorward/function/pow.h"
+#include "tensorward/function/relu.h"
 #include "tensorward/function/reshape.h"
 #include "tensorward/function/sigmoid.h"
 #include "tensorward/function/softmax_cross_entropy_error.h"
 #include "tensorward/function/square.h"
-#include "tensorward/function/sum.h"
+#include "tensorward/function/sum.h"  // TODO: Change the order from "sum, sum-to" to "sum-to, sum" (alphabetically)
 #include "tensorward/function/sum_to.h"
 #include "tensorward/function/transpose.h"
