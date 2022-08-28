@@ -25,6 +25,8 @@ cc_library(
   name = "dataset",
   hdrs = ["dataset.h"],
   deps = [
+    "//tensorward/dataset:mnist_one_tenth",
+    "//tensorward/dataset:mnist",
     "//tensorward/dataset:spiral",
   ],
   visibility = ["//visibility:public"],
