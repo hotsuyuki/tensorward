@@ -22,9 +22,11 @@ class Dataset {
         data_transform_lambdas_(data_transform_lambdas),
         label_transform_lambdas_(label_transform_lambdas) {
     // Creates a directory for saving the dataset files under "~/.tensorward/dataset/" if it doesn't exist yet.
-    dataset_directory_path_ =
-        static_cast<std::filesystem::path>(std::getenv("HOME")) / ".tensorward" / "dataset" / dataset_directory_name;
-    std::filesystem::create_directories(dataset_directory_path_);
+    if (std::getenv("HOME")) {
+      dataset_directory_path_ =
+          static_cast<std::filesystem::path>(std::getenv("HOME")) / ".tensorward" / "dataset" / dataset_directory_name;
+      std::filesystem::create_directories(dataset_directory_path_);
+    }
   }
 
   virtual ~Dataset() {}
