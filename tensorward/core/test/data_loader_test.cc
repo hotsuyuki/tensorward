@@ -14,9 +14,9 @@ constexpr std::size_t kBatchSize = 10;
 
 }  // namespace
 
-class DatasetTest : public ::testing::Test {
+class DataLoaderTest : public ::testing::Test {
  protected:
-  DatasetTest()
+  DataLoaderTest()
       : spiral_dataset_ptr_(AsDatasetSharedPtr<dataset::Spiral>(kIsTrainingMode)),
         spiral_data_loader_with_shuffle_(spiral_dataset_ptr_, kBatchSize, /* does_shuffle_dataset = */ true),
         spiral_data_loader_without_shuffle_(spiral_dataset_ptr_, kBatchSize, /* does_shuffle_dataset = */ false) {}
@@ -26,7 +26,7 @@ class DatasetTest : public ::testing::Test {
   DataLoader spiral_data_loader_without_shuffle_;
 };
 
-TEST_F(DatasetTest, ResetTest) {
+TEST_F(DataLoaderTest, InitTest) {
   const xt::xarray<std::size_t> non_shuffled_indices = xt::arange(spiral_dataset_ptr_->size());
 
   // Checks that the indicies in the data loader (with shuffle) are shuffled after `Init()`.
@@ -38,7 +38,7 @@ TEST_F(DatasetTest, ResetTest) {
   EXPECT_EQ(spiral_data_loader_without_shuffle_.indices(), non_shuffled_indices);
 }
 
-TEST_F(DatasetTest, GetBatchAtTest) {
+TEST_F(DataLoaderTest, GetBatchAtTest) {
   ASSERT_EQ(spiral_data_loader_with_shuffle_.max_iteration(), spiral_data_loader_without_shuffle_.max_iteration());
 
   for (std::size_t i = 0; i < spiral_data_loader_with_shuffle_.max_iteration(); ++i) {
