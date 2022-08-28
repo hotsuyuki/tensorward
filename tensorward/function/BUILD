@@ -139,23 +139,23 @@ cc_library(
 )
 
 cc_library(
-  name = "sum",  # TODO: Change the order from "sum, sum-to" to "sum-to, sum" (alphabetically)
-  hdrs = ["sum.h"],
-  deps = [
-    "//tensorward/core:function",
-    "//tensorward/core:tensor",
-    "@xtensor//:xtensor",
-  ],
-  visibility = ["//visibility:public"],
-)
-
-cc_library(
   name = "sum_to",
   hdrs = ["sum_to.h"],
   deps = [
     "//tensorward/core:function",
     "//tensorward/core:tensor",
     "//tensorward/util:xtensor_sum_to",
+    "@xtensor//:xtensor",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+cc_library(
+  name = "sum",
+  hdrs = ["sum.h"],
+  deps = [
+    "//tensorward/core:function",
+    "//tensorward/core:tensor",
     "@xtensor//:xtensor",
   ],
   visibility = ["//visibility:public"],

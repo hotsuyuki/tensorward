@@ -48,8 +48,8 @@ cc_library(
     "//tensorward/function:sigmoid",
     "//tensorward/function:softmax_cross_entropy_error",
     "//tensorward/function:square",
-    "//tensorward/function:sum",  # TODO: Change the order from "sum, sum-to" to "sum-to, sum" (alphabetically)
     "//tensorward/function:sum_to",
+    "//tensorward/function:sum",
     "//tensorward/function:transpose",
   ],
   visibility = ["//visibility:public"],
