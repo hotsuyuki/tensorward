@@ -18,7 +18,7 @@ namespace tensorward::layer {
 class Linear : public core::Layer {
  public:
   Linear(const std::size_t out_size, const bool does_use_bias = true)
-      : out_size_(out_size), does_use_bias_(does_use_bias) {}
+      : out_size_(out_size), does_use_bias_(does_use_bias), W_name_("W"), b_name_("b") {}
 
   ~Linear() {}
 
@@ -61,9 +61,9 @@ class Linear : public core::Layer {
 
   bool does_use_bias_;
 
-  const std::string W_name_ = "W";
+  std::string W_name_;
 
-  const std::string b_name_ = "b";
+  std::string b_name_;
 };
 
 }  // namespace tensorward::layer
