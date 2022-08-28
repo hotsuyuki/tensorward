@@ -30,7 +30,7 @@ jobs:
           # key: ${{ runner.os }}-${{ env.BAZEL_VERSION }}-bazel-cache
 
       - name: Run bazel test for tensorward library
-        run: bazel test //tensorward/... --test_output=all
+        run: bazel test //tensorward/...
 
       - name: Run bazel build for example code
         run: bazel build //example/...
