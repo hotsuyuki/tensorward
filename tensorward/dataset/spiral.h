@@ -10,9 +10,9 @@ namespace tensorward::dataset {
 
 class Spiral : public core::Dataset {
  public:
-  Spiral(const bool is_training_mode, const std::vector<core::TransformLambda>& data_transform_lambdas = {},
-         const std::vector<core::TransformLambda>& label_transform_lambdas = {})
-      : core::Dataset(is_training_mode, data_transform_lambdas, label_transform_lambdas),
+  Spiral(const bool is_training_mode, const std::vector<core::TransformLambda>& data_transform_lambdas,
+         const std::vector<core::TransformLambda>& label_transform_lambdas)
+      : core::Dataset(is_training_mode, data_transform_lambdas, label_transform_lambdas, "Spiral"),
         in_size_(2),
         class_size_(3),
         data_size_for_each_class_(100),
