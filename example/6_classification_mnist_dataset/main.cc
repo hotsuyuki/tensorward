@@ -48,20 +48,27 @@ int main(int argc, char* argv[]) {
 
   // Dataset
   const tw::DatasetSharedPtr train_dataset_ptr =
-      tw::AsDatasetSharedPtr<D::MnistOneTenth>(/* is_training_mode = */ true, data_transform_lambdas);
+      tw::AsDatasetSharedPtr<D::Mnist>(/* is_training_mode = */ true, data_transform_lambdas);
   const tw::DatasetSharedPtr test_dataset_ptr =
-      tw::AsDatasetSharedPtr<D::MnistOneTenth>(/* is_training_mode = */ false, data_transform_lambdas);
-  tw::DataLoader train_data_loader(train_dataset_ptr, kBatchSize, /* does_shuffle_dataset = */ true);
-  tw::DataLoader test_data_loader(test_dataset_ptr, kBatchSize, /* does_shuffle_dataset = */ false);
+      tw::AsDatasetSharedPtr<D::Mnist>(/* is_training_mode = */ false, data_transform_lambdas);
 
-  DEBUG_PRINT_SCALAR(train_data_loader.dataset_size());
+  // Decimates the size of the dataset (to 1/10) and gets each batch of the dataset through `DataLoader` class.
+  constexpr std::size_t kDecimatingScale = 10;
+  tw::DataLoader train_data_loader(train_dataset_ptr, kBatchSize, /* does_shuffle_dataset = */ true, kDecimatingScale);
+  tw::DataLoader test_data_loader(test_dataset_ptr, kBatchSize, /* does_shuffle_dataset = */ false, kDecimatingScale);
+
   DEBUG_PRINT_SCALAR(xt::adapt(train_data_loader.dataset_ptr()->data().shape()));
   DEBUG_PRINT_SCALAR(xt::adapt(train_data_loader.dataset_ptr()->label().shape()));
+  DEBUG_PRINT_SCALAR(train_data_loader.dataset_size());
+  DEBUG_PRINT_SCALAR(train_data_loader.batch_size());
+  DEBUG_PRINT_SCALAR(train_data_loader.max_iteration());
   std::cout << std::endl;
 
-  DEBUG_PRINT_SCALAR(test_data_loader.dataset_size());
   DEBUG_PRINT_SCALAR(xt::adapt(test_data_loader.dataset_ptr()->data().shape()));
   DEBUG_PRINT_SCALAR(xt::adapt(test_data_loader.dataset_ptr()->label().shape()));
+  DEBUG_PRINT_SCALAR(test_data_loader.dataset_size());
+  DEBUG_PRINT_SCALAR(test_data_loader.batch_size());
+  DEBUG_PRINT_SCALAR(test_data_loader.max_iteration());
   std::cout << std::endl;
 
   // Model

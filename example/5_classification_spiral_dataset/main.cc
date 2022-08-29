@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 
+#include <xtensor/xadapt.hpp>
 #include <xtensor/xarray.hpp>
 #include <xtensor/xio.hpp>
 #include <xtensor/xrandom.hpp>
@@ -36,10 +37,26 @@ int main(int argc, char* argv[]) {
   constexpr float kLearningRate = 1.0;
 
   // Dataset
-  const tw::DatasetSharedPtr train_dataset = tw::AsDatasetSharedPtr<D::Spiral>(/* is_training_mode = */ true);
-  const tw::DatasetSharedPtr test_dataset = tw::AsDatasetSharedPtr<D::Spiral>(/* is_training_mode = */ false);
-  tw::DataLoader train_data_loader(train_dataset, kBatchSize, /* does_shuffle_dataset = */ true);
-  tw::DataLoader test_data_loader(test_dataset, kBatchSize, /* does_shuffle_dataset = */ false);
+  const tw::DatasetSharedPtr train_dataset_ptr = tw::AsDatasetSharedPtr<D::Spiral>(/* is_training_mode = */ true);
+  const tw::DatasetSharedPtr test_dataset_ptr = tw::AsDatasetSharedPtr<D::Spiral>(/* is_training_mode = */ false);
+
+  // Gets each batch of the dataset through `DataLoader` class.
+  tw::DataLoader train_data_loader(train_dataset_ptr, kBatchSize, /* does_shuffle_dataset = */ true);
+  tw::DataLoader test_data_loader(test_dataset_ptr, kBatchSize, /* does_shuffle_dataset = */ false);
+
+  DEBUG_PRINT_SCALAR(xt::adapt(train_data_loader.dataset_ptr()->data().shape()));
+  DEBUG_PRINT_SCALAR(xt::adapt(train_data_loader.dataset_ptr()->label().shape()));
+  DEBUG_PRINT_SCALAR(train_data_loader.dataset_size());
+  DEBUG_PRINT_SCALAR(train_data_loader.batch_size());
+  DEBUG_PRINT_SCALAR(train_data_loader.max_iteration());
+  std::cout << std::endl;
+
+  DEBUG_PRINT_SCALAR(xt::adapt(test_data_loader.dataset_ptr()->data().shape()));
+  DEBUG_PRINT_SCALAR(xt::adapt(test_data_loader.dataset_ptr()->label().shape()));
+  DEBUG_PRINT_SCALAR(test_data_loader.dataset_size());
+  DEBUG_PRINT_SCALAR(test_data_loader.batch_size());
+  DEBUG_PRINT_SCALAR(test_data_loader.max_iteration());
+  std::cout << std::endl;
 
   // Model
   M::MultiLayerPerceptron model({kHiddenSize, kOutSize}, tw::AsFunctionSharedPtr<F::Sigmoid>());

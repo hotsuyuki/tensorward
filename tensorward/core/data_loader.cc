@@ -8,7 +8,27 @@
 namespace tensorward::core {
 
 void DataLoader::Init() {
-  indices_ = does_shuffle_dataset_ ? xt::random::permutation(dataset_ptr_->size()) : xt::arange(dataset_ptr_->size());
+  assert((static_cast<void>("`decimating_scale_` must be a value such that `dataset_ptr_->size()` is divisible by it."),
+          dataset_ptr_->size() % decimating_scale_ == 0));
+
+  const std::size_t full_dataset_size = dataset_ptr_->size();
+  const xt::xarray<std::size_t> full_indices = xt::arange(full_dataset_size);
+
+  const bool does_decimate_dataset = (2 <= decimating_scale_);
+  const bool is_decimated_indices_empty = (decimated_indices_ == xt::xarray<std::size_t>());
+
+  if (does_decimate_dataset && is_decimated_indices_empty) {
+    const std::size_t decimated_dataset_size = full_dataset_size / decimating_scale_;
+    decimated_indices_ = xt::zeros<std::size_t>({decimated_dataset_size});
+    for (std::size_t i = 0; i < decimated_dataset_size; ++i) {
+      xt::view(decimated_indices_, i) = xt::view(full_indices, decimating_scale_ * i);
+    }
+  }
+
+  indices_ = (does_decimate_dataset) ? decimated_indices_ : full_indices;
+  if (does_shuffle_dataset_) {
+    xt::random::shuffle(indices_);
+  }
 }
 
 const std::pair<xt::xarray<float>, xt::xarray<float>> DataLoader::GetBatchAt(const std::size_t i) {
@@ -35,7 +55,7 @@ const std::pair<xt::xarray<float>, xt::xarray<float>> DataLoader::GetBatchAt(con
 
   const std::pair<xt::xarray<float>, xt::xarray<float>> batch_data_label_pair(batch_data, batch_label);
 
-  if (i == (max_iteration_ - 1)) {
+  if (i == (max_iteration() - 1)) {
     Init();
   }
 
