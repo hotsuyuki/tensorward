@@ -1,18 +1,6 @@
 load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
 
 cc_library(
-  name = "mnist_one_tenth",
-  hdrs = [
-    "mnist_one_tenth.h",
-  ],
-  deps = [
-    ":mnist",
-    "@xtensor//:xtensor",
-  ],
-  visibility = ["//visibility:public"],
-)
-
-cc_library(
   name = "mnist",
   hdrs = [
     "mnist.h",

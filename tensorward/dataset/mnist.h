@@ -168,7 +168,7 @@ class Mnist : public core::Dataset {
     Init();
   }
 
-  virtual ~Mnist() {}
+  ~Mnist() {}
 
   void Init() override {
     const std::filesystem::path data_file_name =
