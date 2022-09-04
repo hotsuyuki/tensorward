@@ -12,7 +12,7 @@ A minimalist deep learning framework with Define-by-Run schema written in C++
 ## Project purpose
 
 This is a build-it-yourself project for learning about the internal concepts underlying deep learning framework with C++. 
-The only external dependency of this project is [xtensor](https://github.com/xtensor-stack/xtensor), a NumPy-like library for C++ (other than non-essential ones such as [curl](https://github.com/curl/curl/), [gzip-hpp](https://github.com/mapbox/gzip-hpp/)).
+The only external dependency of this project is [xtensor](https://github.com/xtensor-stack/xtensor), a NumPy-like library for C++ (other than non-essential ones such as [curl](https://github.com/curl/curl/) and [gzip-hpp](https://github.com/mapbox/gzip-hpp/)).
 
 The only prerequisite to build and run this project is:
 
@@ -24,12 +24,12 @@ That's it. All of the external dependencies needed for this project will be inst
 
 The figure below shows the relationship between each class when we run a model that is composed of a single linear layer and use cross entropy error as a loss function.
 
-![./document/architecture_overview_diagram.png](./document/architecture_overview_diagram.png)
+![./document/README_image/architecture_overview_diagram.png](./document/README_image/architecture_overview_diagram.png)
 
 Basically the process flow is like: a `Tensor` is inputted to a `Function` and it outputs a new `Tensor`, and the outputted `Tensor` is then inputted to another `Function` and it outputs another new `Tensor` ... and so on.
 It flows in *forward* direction.
-However the relationship between each `Tensor` and `Function` is connected in *backward* direction.
-This backward connection between each `Tensor` and `Function` enables auto gradient through backpropagation with Define-by-Run schema.
+However the relationship between each `Tensor` and `Function` is connected in *backward* direction, and this backward connection is established when each `Function` executes its forward calculation.
+This enables automatic gradient through backpropagation with Define-by-Run schema.
 
 To implement the Define-by-Run schema by imitating Python memory management, C++ shared pointer is chosen as the key ingredient of this project (Circles with a solid/dashed arrow in the figure above denote shared/weak pointer).
 For more details about the similarity between C++ shared pointer and Python memory management, see this page: [Memory management in C++ and Python](https://doc.nektar.info/developerguide/latest/developer-guidese58.html)
@@ -91,7 +91,7 @@ $ bazel run //example/6_classification_mnist_dataset:main
 ```
 
 and the result would look like below.
-The loss decreases as epoch goes and the accuracy after 5 epochs is more than 85%. 
+The loss decreases as epoch iterates and the accuracy after 5 epochs is more than 85%.
 
 ```
 Train...
@@ -147,6 +147,6 @@ average_test_accuracies = [0.782, 0.843, 0.858, 0.862, 0.869, ]
 
 ## Future work
 - [ ] Add wrapper classes for `tw::XxxSharedPtr` classes for usability
-- [ ] Add more layers: Dropout, Convolution, Recurrent, etc.
+- [ ] Add more layers such as Dropout, Convolution, Recurrent, etc.
 - [ ] Support Graphviz to visualize computational graphs
 - [ ] Support GPU acceleration
